@@ -12,14 +12,13 @@ import java.util.*;
  */
 public class Tile {
 
-    //private final int X;
-    //private final int Y;
     private final Coord XY;
     private int height;
     private File image;
 
     private boolean fightersCanPass;
     private boolean projectilesCanPass;
+    private boolean hasBeenVisited;
     private List<Tile> linked;
 
     /*
@@ -33,7 +32,9 @@ public class Tile {
         //IMAGE = INIT_IMAGE;
         fightersCanPass = false;
         projectilesCanPass = false;
-        linked = Collections.<Tile>emptyList();
+        //linked = Collections.<Tile>emptyList();
+        linked = new ArrayList<Tile>();
+        hasBeenVisited = false;
     }
 
     public Tile(){
@@ -41,18 +42,15 @@ public class Tile {
         height = 1;
         fightersCanPass = false;
         projectilesCanPass = false;
-        linked = Collections.<Tile>emptyList();
+        //linked = Collections.<Tile>emptyList();
+        linked = new ArrayList<Tile>();
     }
 
     /*
         Operation methods
      */
     public void addLink(Tile newTile){
-        //System.out.println(newTile);
-        //System.out.println(linked.size());
-
-
-        //linked.add(newTile);
+        linked.add(newTile);
     }
 
     public void setFightersCanPass(boolean newFightersCanPass){
@@ -70,6 +68,10 @@ public class Tile {
     public void setImage(File i){
         //should check file type here
         image = i;
+    }
+
+    public void resetHasBeenVisited(){
+        hasBeenVisited = false;
     }
 
     /*

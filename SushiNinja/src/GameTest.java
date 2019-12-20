@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GameTest {
@@ -24,29 +27,29 @@ public class GameTest {
         assertEquals(yTest, yGolden);
     }
 
-    @Test
-    public void coordSetXWorks(){
+
+    /*public void coordSetXWorks(){
         Coord coordTest = new Coord();
         Coord coordGolden = new Coord(8, 0);
         coordTest.setX(8);
         assertEquals(coordTest, coordGolden);
     }
 
-    @Test void coordSetYWorks(){
+    void coordSetYWorks(){
         Coord coordTest = new Coord();
         Coord coordGolden = new Coord(0, 2);
         coordTest.setY(2);
         assertEquals(coordTest, coordGolden);
     }
 
-    @Test
+
     public void coordSetXYWorks(){
         Coord coordTest = new Coord();
         Coord coordGolden = new Coord(3, 7);
         coordTest.setXY(3, 7);
         assertEquals(coordTest, coordGolden);
     }
-
+    */
     @Test
     public void coordToStringWorks(){
         Coord coordTest = new Coord(6,2);
@@ -78,7 +81,17 @@ public class GameTest {
         Tile class tests
      */
 
-    //Add link goes here.
+    @Test
+    public void tileAddLinkWorks(){
+        Tile tileTest = new Tile();
+        Tile tileAdd = new Tile();
+        tileTest.addLink(tileAdd);
+
+        List<Tile> listGolden = new ArrayList<>();
+        listGolden.add(tileAdd);
+
+        assertEquals(tileTest.getLinked(), listGolden);
+    }
 
     @Test
     public void tileSetFightersCanPassWorks(){
@@ -151,5 +164,12 @@ public class GameTest {
         assertFalse(boolTest);
     }
 
+    @Test
+    public void tileGetLinkedWorks(){
+        Tile tileTest = new Tile();
+        List<Tile> listTest = tileTest.getLinked();
+        List<Tile> listGolden = new ArrayList<>();
+        assertEquals(listTest, listGolden);
+    }
 
 }

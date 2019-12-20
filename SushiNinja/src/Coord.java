@@ -21,24 +21,6 @@ public class Coord {
     }
 
     /*
-    These are needed to prevent garbage.
-    If I made x and y final then I would have to make a new Coord
-    every time I wished to move a Fighter.
-    That's a lot of garbage!
-    */
-    public void setX(int newX){
-        x = newX;
-    }
-
-    public void setY(int newY){
-        y = newY;
-    }
-
-    public void setXY(int newX, int newY){
-        x = newX;
-        y = newY;
-    }
-    /*
         Methods to make Coord a valid hashtable key
 
         Override is in place to catch errors in the hashtable functions
