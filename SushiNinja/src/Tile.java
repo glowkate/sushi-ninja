@@ -1,3 +1,5 @@
+import org.hamcrest.Condition;
+
 import java.io.File;
 import java.util.*;
 
@@ -19,7 +21,8 @@ public class Tile {
     private boolean fightersCanPass;
     private boolean projectilesCanPass;
     private boolean hasBeenVisited;
-    private List<Tile> linked;
+    private LinkedList<Tile> pathToTile;
+    private ArrayList<Tile> linked;
 
     /*
         Class initialisation
@@ -30,18 +33,19 @@ public class Tile {
         //Default vars
         height = 1;
         //IMAGE = INIT_IMAGE;
-        fightersCanPass = false;
-        projectilesCanPass = false;
+        fightersCanPass = true;
+        projectilesCanPass = true;
         //linked = Collections.<Tile>emptyList();
         linked = new ArrayList<Tile>();
+        pathToTile = new LinkedList<>();
         hasBeenVisited = false;
     }
 
     public Tile(){
         XY = new Coord(0,0);
         height = 1;
-        fightersCanPass = false;
-        projectilesCanPass = false;
+        fightersCanPass = true;
+        projectilesCanPass = true;
         //linked = Collections.<Tile>emptyList();
         linked = new ArrayList<Tile>();
     }
@@ -54,7 +58,9 @@ public class Tile {
     }
 
     public void setFightersCanPass(boolean newFightersCanPass){
+        System.out.println(newFightersCanPass);
         fightersCanPass = newFightersCanPass;
+        System.out.println(fightersCanPass);
     }
 
     public void setProjectilesCanPass(boolean newProjectilesCanPass){
@@ -70,8 +76,23 @@ public class Tile {
         image = i;
     }
 
-    public void resetHasBeenVisited(){
+    public void setPathAndVisit(LinkedList<Tile> newPath){
+        pathToTile = newPath;
+        hasBeenVisited = true;
+    }
+
+    public void resetPathfindingVars(){
         hasBeenVisited = false;
+        pathToTile.clear();
+    }
+
+    public boolean checkPassability(Tile compTile){
+        boolean isHeightPassable = !(heightDif(compTile) > 1); //If height diff is 2 or more, it's impassable
+        return (!hasBeenVisited && isHeightPassable && fightersCanPass);
+    }
+
+    public int heightDif(Tile compTile){ //gets how much higher one tile is compared to this one
+        return(compTile.getHeight() - height);
     }
 
     /*
@@ -101,11 +122,24 @@ public class Tile {
         return(projectilesCanPass);
     }
 
-    public List<Tile> getLinked(){
+    public ArrayList<Tile> getLinked(){
         return(linked);
     }
 
-    public File giveImage(){
+    public LinkedList<Tile> getPath(){
+        return (pathToTile);
+    }
+
+    public boolean getHasBeenVisited(){
+        return hasBeenVisited;
+    }
+
+    public File getImage(){
         return(image);
+    }
+
+    @Override
+    public String toString(){
+        return(XY.toString());
     }
 }

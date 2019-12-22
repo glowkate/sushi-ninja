@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,29 +28,6 @@ public class GameTest {
         assertEquals(yTest, yGolden);
     }
 
-
-    /*public void coordSetXWorks(){
-        Coord coordTest = new Coord();
-        Coord coordGolden = new Coord(8, 0);
-        coordTest.setX(8);
-        assertEquals(coordTest, coordGolden);
-    }
-
-    void coordSetYWorks(){
-        Coord coordTest = new Coord();
-        Coord coordGolden = new Coord(0, 2);
-        coordTest.setY(2);
-        assertEquals(coordTest, coordGolden);
-    }
-
-
-    public void coordSetXYWorks(){
-        Coord coordTest = new Coord();
-        Coord coordGolden = new Coord(3, 7);
-        coordTest.setXY(3, 7);
-        assertEquals(coordTest, coordGolden);
-    }
-    */
     @Test
     public void coordToStringWorks(){
         Coord coordTest = new Coord(6,2);
@@ -78,6 +56,51 @@ public class GameTest {
     }
 
     /*
+        Map class tests
+     */
+
+    @Test
+    public void mapAddTileWorks(){
+        Coord coordIn = new Coord(3, 3);
+        Tile tileIn = new Tile(3, 3);
+        Map mapTest = new Map();
+
+        mapTest.addTile(tileIn);
+        assertEquals(mapTest.getTile(coordIn), tileIn);
+    }
+
+    @Test
+    public void mapLinkMapWorks(){
+        Map mapTest = new Map(2, 2);
+        Coord coordComp1 = new Coord(1,1);
+        Coord coordComp2 = new Coord(1,2);
+        Coord coordComp3 = new Coord(2,1);
+
+        Tile tileComp1 = mapTest.getTile(coordComp1);
+        Tile tileComp2 = mapTest.getTile(coordComp2);
+        Tile tileComp3 = mapTest.getTile(coordComp3);
+
+        ArrayList<Tile> linkedComp = tileComp1.getLinked();
+
+        assertEquals(linkedComp.get(1), tileComp2);
+        assertEquals(linkedComp.get(0), tileComp3);
+    }
+
+    @Test //IN PROGRESS
+    public void mapGetFighterPathWorks(){
+        Map mapTest = new Map(3, 3);
+        Coord coordIn1 = new Coord(1,1);
+        Coord coordIn2 = new Coord(2,3);
+        LinkedList<Tile> pathTest = mapTest.getFighterPath(coordIn1, coordIn2);
+        LinkedList<Tile> pathGolden = new LinkedList<>();
+        pathGolden.offer(mapTest.getTile(1,1));
+        pathGolden.offer(mapTest.getTile(2,1));
+        pathGolden.offer(mapTest.getTile(2,2));
+        pathGolden.offer(mapTest.getTile(2,3));
+        assertEquals(pathTest, pathGolden);
+    }
+
+    /*
         Tile class tests
      */
 
@@ -96,17 +119,17 @@ public class GameTest {
     @Test
     public void tileSetFightersCanPassWorks(){
         Tile tileTest = new Tile();
-        tileTest.setFightersCanPass(true);
+        tileTest.setFightersCanPass(false);
         boolean boolTest = tileTest.getFightersCanPass();
-        assertTrue(boolTest);
+        assertFalse(boolTest);
     }
 
     @Test
     public void tileSetProjectilesCanPassWorks(){
         Tile tileTest = new Tile();
-        tileTest.setProjectilesCanPass(true);
+        tileTest.setProjectilesCanPass(false);
         boolean boolTest = tileTest.getProjectilesCanPass();
-        assertTrue(boolTest);
+        assertFalse(boolTest);
     }
 
     @Test
@@ -115,6 +138,61 @@ public class GameTest {
         tileTest.setHeight(5);
         int intTest = tileTest.getHeight();
         int intGolden = 5;
+        assertEquals(intTest, intGolden);
+    }
+
+    @Test
+    public void tileSetPathAndVisitWorks(){
+        Tile tileTest = new Tile();
+        Tile tileIn1 = new Tile();
+        Tile tileIn2 = new Tile();
+
+        LinkedList<Tile> pathIn = new LinkedList<>();
+        pathIn.offer(tileIn1);
+        pathIn.offer(tileIn2);
+
+        tileTest.setPathAndVisit(pathIn);
+
+        assertEquals(tileTest.getPath(), pathIn);
+        assertTrue(tileTest.getHasBeenVisited());
+    }
+
+    @Test
+    public void tileResetPathfindingVarsWorks(){
+        Tile tileTest = new Tile();
+        Tile tileIn1 = new Tile();
+        Tile tileIn2 = new Tile();
+
+        LinkedList<Tile> pathIn = new LinkedList<>();
+        pathIn.offer(tileIn1);
+        pathIn.offer(tileIn2);
+
+        tileTest.setPathAndVisit(pathIn);
+        tileTest.resetPathfindingVars();
+
+        LinkedList<Tile> pathGolden = new LinkedList<>();
+
+        assertEquals(tileTest.getPath(), pathGolden);
+        assertFalse(tileTest.getHasBeenVisited());
+    }
+
+    @Test
+    public void tileCheckPassabilityWorks(){
+        Tile tileTest = new Tile();
+        Tile tileComp1 = new Tile();
+        tileComp1.setHeight(3);
+        Tile tileComp2 = new Tile();
+        assertFalse(tileTest.checkPassability(tileComp1));
+        assertTrue(tileTest.checkPassability(tileComp2));
+    }
+
+    @Test
+    public void tileCheckHeightDiffWorks(){
+        Tile tileTest = new Tile();
+        Tile tileComp = new Tile();
+        tileComp.setHeight(5);
+        int intTest = tileTest.heightDif(tileComp);
+        int intGolden = 4;
         assertEquals(intTest, intGolden);
     }
 
@@ -154,14 +232,14 @@ public class GameTest {
     public void tileGetFighterCanPassWorks(){
         Tile tileTest = new Tile();
         boolean boolTest = tileTest.getFightersCanPass();
-        assertFalse(boolTest);
+        assertTrue(boolTest);
     }
 
     @Test
     public void tileGetProjectilesCanPassWorks(){
         Tile tileTest = new Tile();
         boolean boolTest = tileTest.getProjectilesCanPass();
-        assertFalse(boolTest);
+        assertTrue(boolTest);
     }
 
     @Test

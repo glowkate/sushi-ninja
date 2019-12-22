@@ -1,7 +1,4 @@
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Map {
 
@@ -18,17 +15,15 @@ public class Map {
         linkMap();
     }
 
+    public Map(){
+        tiles = new Hashtable();
+        makeMap(1, 1);
+        linkMap();
+    }
 
     /*
         Private methods
      */
-    private String toString(final int X, final int Y) {
-        return (X + "," + Y);
-    }
-
-    private int heightDiff(Tile tile1, Tile tile2){
-        return(tile2.getHeight() - tile1.getHeight());
-    }
 
     private void linkTiles(Tile tile1, Tile tile2){
         tile1.addLink(tile2);
@@ -42,8 +37,30 @@ public class Map {
         tiles.put(newTile.getXY(), newTile);
     }
 
-    public void getFighterPath(Coord start, Coord end){
+    public LinkedList<Tile> getFighterPath(Coord startCoords, Coord endCoords){
+        //Start stuff
+        Tile crntTile = (Tile)tiles.get(startCoords);
+        Tile endTile = (Tile)tiles.get(endCoords);
+        ArrayList<Tile> crntLinked;
+        LinkedList<Tile> crntPath = new LinkedList<>();
+        LinkedList<Tile> que = new LinkedList<>();
+        //crntTile.getPath().offer(crntTile);
+        crntTile.setPathAndVisit(crntPath);
 
+        while(crntTile != endTile){
+            crntLinked = crntTile.getLinked();
+            for(Tile t : crntLinked){
+                if (t.checkPassability(crntTile)){
+                    crntPath = (LinkedList<Tile>) crntTile.getPath().clone();
+                    crntPath.offer(crntTile);
+                    t.setPathAndVisit(crntPath);
+                    que.offer(t);
+                }
+            }
+            crntTile = que.pop();
+        }
+        crntTile.getPath().offer(crntTile);
+        return(crntTile.getPath());
     }
 
     private void makeMap(int xSize, int ySize){
@@ -98,6 +115,15 @@ public class Map {
                 lastCoord = nextCoord;
             }
         }
+    }
+
+    public Tile getTile(Coord locationCoord){
+        return((Tile)tiles.get(locationCoord));
+    }
+
+    public Tile getTile(int x, int y){
+        Coord location = new Coord(x,y);
+        return((Tile)tiles.get(location));
     }
 }
 
