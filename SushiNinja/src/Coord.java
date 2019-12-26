@@ -37,8 +37,6 @@ public class Coord {
             return false;
         }
         else {
-            //System.out.println(obj);
-            //System.out.println(this);
             Coord compCoord = (Coord) obj;
             return (x == compCoord.getX() && y == compCoord.getY());
         }
@@ -46,8 +44,6 @@ public class Coord {
 
     @Override
     public int hashCode(){
-        //System.out.println(X * 283 + Y);
         return(x * 283 + y);
-        //return (1);
     }
 }

@@ -56,6 +56,92 @@ public class GameTest {
     }
 
     /*
+        Fighter class tests
+     */
+
+    @Test
+    public void fighterActivateWorks(){
+        Fighter fighterTest = new Fighter();
+        Coord coordIn = new Coord();
+        fighterTest.activate(coordIn);
+        assertEquals(fighterTest.getFighterStatus(), Status.ACTIVE_ALIVE);
+    }
+
+    @Test
+    public void fighterTakeDamageWorks(){
+        Fighter fighterTest = new Fighter();
+        fighterTest.takeDamage(5);
+        assertEquals(fighterTest.getCrntHp(), 0);
+        assertEquals(fighterTest.getFighterStatus(), Status.ACTIVE_DEAD);
+    }
+
+    @Test
+    public void fighterTakeHealingWorks(){
+        Fighter fighterTest = new Fighter(5,5,5,5);
+        fighterTest.takeDamage(4);
+        fighterTest.takeHealing(10);
+        assertEquals(fighterTest.getCrntHp(), 5); //Healing shouldn't go above max HP
+    }
+
+    @Test void fighterSetXYWorks(){
+        Fighter fighterTest1 = new Fighter();
+        Fighter fighterTest2 = new Fighter();
+        Coord coordIn = new Coord(5, 6);
+        int intInX = 5;
+        int intInY = 6;
+        Coord coordGolden = new Coord(5, 6);
+
+        fighterTest1.setXY(coordIn);
+        fighterTest2.setXY(intInX, intInY);
+
+        assertEquals(fighterTest1.getXY(), coordGolden);
+        assertEquals(fighterTest2.getXY(), coordGolden);
+    }
+
+    @Test
+    public void fighterGetMaxHpWorks(){
+        Fighter fighterTest = new Fighter();
+        assertEquals(fighterTest.getMaxHp(), 1);
+    }
+
+    @Test
+    public void fighterGetCrntHpWorks(){
+        Fighter fighterTest = new Fighter();
+        assertEquals(fighterTest.getCrntHp(), 1);
+    }
+
+    @Test
+    public void fighterGetCanMeleeAttackWorks(){
+        Fighter fighterTest = new Fighter();
+        assertFalse(fighterTest.getCanMeleeAttack());
+    }
+
+    @Test
+    public void fighterGetCanRangeAttackWorks(){
+        Fighter fighterTest = new Fighter();
+        assertFalse(fighterTest.getCanRangeAttack());
+    }
+
+    @Test
+    public void fighterGetCanMeleeHealWorks(){
+        Fighter fighterTest = new Fighter();
+        assertFalse(fighterTest.getCanMeleeHeal());
+    }
+
+    @Test
+    public void fighterGetCanRangeHealWorks(){
+        Fighter fighterTest = new Fighter();
+        assertFalse(fighterTest.getCanRangeHeal());
+    }
+
+    @Test
+    public void fighterGetNameWorks(){
+        Fighter fighterTest = new Fighter();
+        String stringGolden = "N/A";
+        assertEquals(fighterTest.getName(), stringGolden);
+    }
+
+    /*
         Map class tests
      */
 
@@ -86,7 +172,7 @@ public class GameTest {
         assertEquals(linkedComp.get(0), tileComp3);
     }
 
-    @Test //IN PROGRESS
+    @Test
     public void mapGetFighterPathWorks(){
         Map mapTest = new Map(3, 3);
         Coord coordIn1 = new Coord(1,1);

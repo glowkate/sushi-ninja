@@ -1,0 +1,3 @@
+enum Status{
+    INACTIVE, ACTIVE_ALIVE, ACTIVE_DEAD;
+}
