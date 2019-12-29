@@ -1,4 +1,10 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
+
+/*
+    Class used for creating, storing, and running operations on a dictionary of tiles.
+ */
 
 public class Map {
 
@@ -9,12 +15,21 @@ public class Map {
     /*
         Initialisation
      */
+
+    public Map(String init_map){
+        tiles = new Hashtable();
+        makeMap(init_map);
+        linkMap();
+    }
+
+    //For testing only
     public Map(int x, int y) {
         tiles = new Hashtable();
         makeMap(x, y);
         linkMap();
     }
 
+    //For testing only
     public Map(){
         tiles = new Hashtable();
         makeMap(1, 1);
@@ -30,24 +45,21 @@ public class Map {
         tile2.addLink(tile1);
     }
 
-    /*
-        Operation methods
-     */
     public void addTile(Tile newTile){
         tiles.put(newTile.getXY(), newTile);
     }
 
     public LinkedList<Tile> getFighterPath(Coord startCoords, Coord endCoords){
-        //Start stuff
         Tile crntTile = (Tile)tiles.get(startCoords);
         Tile endTile = (Tile)tiles.get(endCoords);
         ArrayList<Tile> crntLinked;
         LinkedList<Tile> crntPath = new LinkedList<>();
         LinkedList<Tile> que = new LinkedList<>();
-        //crntTile.getPath().offer(crntTile);
         crntTile.setPathAndVisit(crntPath);
 
-        while(crntTile != endTile){
+        boolean queFull = true;
+
+        while(crntTile != endTile && queFull){
             crntLinked = crntTile.getLinked();
             for(Tile t : crntLinked){
                 if (t.checkPassability(crntTile)){
@@ -57,41 +69,77 @@ public class Map {
                     que.offer(t);
                 }
             }
-            crntTile = que.pop();
+            if (que.size() == 0){ //if this is true, there is no path to the destination tile.
+                queFull = false;
+            }
+            else {
+                crntTile = que.pop();
+            }
         }
-        crntTile.getPath().offer(crntTile);
-        return(crntTile.getPath());
+        if (crntTile == endTile) {
+            crntTile.getPath().offer(crntTile);
+            return (crntTile.getPath());
+        }
+        else {
+            return (new LinkedList<>());
+        }
     }
 
+    private void makeMap(String init_map){
+        char crntChar;
+        Tile toAddTile;
+        int crntX = 0;
+        int crntY = 0;
+        for(int i = 0; i < init_map.length(); i++) {
+            crntChar = init_map.charAt(i);
+            switch (crntChar) {
+                case (' '):
+                    toAddTile = new Tile(crntX, crntY, TileType.OPENSPACE);
+                    addTile(toAddTile);
+                    break;
+                case ('X'):
+                    toAddTile = new Tile(crntX, crntY, TileType.WALL);
+                    addTile(toAddTile);
+                    break;
+                case ('V'):
+                    toAddTile = new Tile(crntX, crntY, TileType.GAP);
+                    addTile(toAddTile);
+                    break;
+                default:
+                    assert(false);
+                    break;
+            }
+            if (crntX == 9) {
+                crntX = 0;
+                crntY++;
+            }
+            else{
+                crntX++;
+            }
+        }
+        assert(crntX == 0 || crntY == 8);
+    }
+
+    //For testing only
     private void makeMap(int xSize, int ySize){
         maxX = xSize;
         maxY = ySize;
-        for(int x = 1; x <= xSize; x++){
-            for(int y = 1; y <= ySize; y++){
-                Tile newTile = new Tile(x, y);
+        for(int x = 0; x < xSize; x++){
+            for(int y = 0; y < ySize; y++){
+                Tile newTile = new Tile(x, y, TileType.OPENSPACE);
                 addTile(newTile);
             }
         }
     }
 
-    /*
-    Although we make and override a bunch of objects this function should
-    only be called at the beginning of the game where we can afford time loss
-    to garbage collection
-    */
     private void linkMap(){
-        final Coord CoordTest1 = new Coord(1, 1);
-        final Coord CoordTest2 = new Coord(1, 2);
-
         Coord lastCoord;
         Coord nextCoord;
         Tile tile1;
         Tile tile2;
-
-        // Linking the Xs
-        for(int y = 1; y <= maxY; y++){
-            lastCoord = new Coord(1, y);
-            for(int x = 2; x <= maxX; x++){
+        for(int y = 0; y < maxY; y++){
+            lastCoord = new Coord(0, y);
+            for(int x = 1; x < maxX; x++){
                 nextCoord = new Coord(x, y);
                 tile1 = (Tile)tiles.get(lastCoord);
                 tile2 = (Tile)tiles.get(nextCoord);
@@ -103,9 +151,9 @@ public class Map {
         }
 
         // Linking the Ys
-        for(int x = 1; x <= maxX; x++){
-            lastCoord = new Coord(x, 1);
-            for(int y = 2; y <= maxY; y++){
+        for(int x = 0; x < maxX; x++){
+            lastCoord = new Coord(x, 0);
+            for(int y = 1; y < maxY; y++){
                 nextCoord = new Coord(x, y);
                 tile1 = (Tile)tiles.get(lastCoord);
                 tile2 = (Tile)tiles.get(nextCoord);
@@ -135,10 +183,4 @@ public class Map {
         }
 
         if I want to iterate over the elements in tiles
- */
-
-/*
-    T N N
-    N T N
-    T N T
  */

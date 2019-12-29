@@ -6,6 +6,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+    This class is for holding the tests for other classes to ensure they work properly.
+ */
+
 public class GameTest {
 
     /*
@@ -146,9 +150,34 @@ public class GameTest {
      */
 
     @Test
+    public void mapStrInitWorks(){
+        String strIn = "XXXXXXXXXX" +
+                       "X        X" +
+                       "X        X" +
+                       "X   VV   X" +
+                       "X  VVVV  X" +
+                       "X        X" +
+                       "XXXXXXXXXX";
+        Map mapTest = new Map(strIn);
+
+        Tile tileGolden1 = new Tile(0,0,TileType.WALL);
+        Tile tileGolden2 = new Tile(9,0,TileType.WALL);
+        Tile tileGolden3 = new Tile(6,4,TileType.GAP);
+        Tile tileGolden4 = new Tile(9,6,TileType.WALL);
+
+        System.out.println(mapTest.getTile(0,0));
+        System.out.println(tileGolden1);
+
+        assertEquals(tileGolden1, mapTest.getTile(0,0));
+        assertEquals(tileGolden2, mapTest.getTile(9,0));
+        assertEquals(tileGolden3, mapTest.getTile(6,4));
+        assertEquals(tileGolden4, mapTest.getTile(9,6));
+    }
+
+    @Test
     public void mapAddTileWorks(){
-        Coord coordIn = new Coord(3, 3);
-        Tile tileIn = new Tile(3, 3);
+        Coord coordIn = new Coord(0, 0);
+        Tile tileIn = new Tile();
         Map mapTest = new Map();
 
         mapTest.addTile(tileIn);
@@ -158,9 +187,10 @@ public class GameTest {
     @Test
     public void mapLinkMapWorks(){
         Map mapTest = new Map(2, 2);
-        Coord coordComp1 = new Coord(1,1);
-        Coord coordComp2 = new Coord(1,2);
-        Coord coordComp3 = new Coord(2,1);
+
+        Coord coordComp1 = new Coord(0,0);
+        Coord coordComp2 = new Coord(0,1);
+        Coord coordComp3 = new Coord(1,0);
 
         Tile tileComp1 = mapTest.getTile(coordComp1);
         Tile tileComp2 = mapTest.getTile(coordComp2);
@@ -175,14 +205,14 @@ public class GameTest {
     @Test
     public void mapGetFighterPathWorks(){
         Map mapTest = new Map(3, 3);
-        Coord coordIn1 = new Coord(1,1);
-        Coord coordIn2 = new Coord(2,3);
+        Coord coordIn1 = new Coord(0,0);
+        Coord coordIn2 = new Coord(1,2);
         LinkedList<Tile> pathTest = mapTest.getFighterPath(coordIn1, coordIn2);
         LinkedList<Tile> pathGolden = new LinkedList<>();
+        pathGolden.offer(mapTest.getTile(0,0));
+        pathGolden.offer(mapTest.getTile(1,0));
         pathGolden.offer(mapTest.getTile(1,1));
-        pathGolden.offer(mapTest.getTile(2,1));
-        pathGolden.offer(mapTest.getTile(2,2));
-        pathGolden.offer(mapTest.getTile(2,3));
+        pathGolden.offer(mapTest.getTile(1,2));
         assertEquals(pathTest, pathGolden);
     }
 
@@ -200,31 +230,6 @@ public class GameTest {
         listGolden.add(tileAdd);
 
         assertEquals(tileTest.getLinked(), listGolden);
-    }
-
-    @Test
-    public void tileSetFightersCanPassWorks(){
-        Tile tileTest = new Tile();
-        tileTest.setFightersCanPass(false);
-        boolean boolTest = tileTest.getFightersCanPass();
-        assertFalse(boolTest);
-    }
-
-    @Test
-    public void tileSetProjectilesCanPassWorks(){
-        Tile tileTest = new Tile();
-        tileTest.setProjectilesCanPass(false);
-        boolean boolTest = tileTest.getProjectilesCanPass();
-        assertFalse(boolTest);
-    }
-
-    @Test
-    public void tileSetHeightWorks(){
-        Tile tileTest = new Tile();
-        tileTest.setHeight(5);
-        int intTest = tileTest.getHeight();
-        int intGolden = 5;
-        assertEquals(intTest, intGolden);
     }
 
     @Test
@@ -265,8 +270,7 @@ public class GameTest {
     @Test
     public void tileCheckPassabilityWorks(){
         Tile tileTest = new Tile();
-        Tile tileComp1 = new Tile();
-        tileComp1.setHeight(3);
+        Tile tileComp1 = new Tile(0,0,TileType.ELEVATED2);
         Tile tileComp2 = new Tile();
         assertFalse(tileTest.checkPassability(tileComp1));
         assertTrue(tileTest.checkPassability(tileComp2));
@@ -275,16 +279,15 @@ public class GameTest {
     @Test
     public void tileCheckHeightDiffWorks(){
         Tile tileTest = new Tile();
-        Tile tileComp = new Tile();
-        tileComp.setHeight(5);
+        Tile tileComp = new Tile(0,0, TileType.ELEVATED2);
         int intTest = tileTest.heightDif(tileComp);
-        int intGolden = 4;
+        int intGolden = 2;
         assertEquals(intTest, intGolden);
     }
 
     @Test
     public void tileGetXYWorks(){
-        Tile tileTest = new Tile(34, 12);
+        Tile tileTest = new Tile(34, 12, TileType.WALL);
         Coord coordTest = tileTest.getXY();
         Coord coordGolden = new Coord(34, 12);
         assertEquals(coordTest, coordGolden);
@@ -292,7 +295,7 @@ public class GameTest {
 
     @Test
     public void tileGetXWorks(){
-        Tile tileTest = new Tile(5, 1);
+        Tile tileTest = new Tile(5, 1, TileType.WALL);
         int intTest = tileTest.getX();
         int intGolden = 5;
         assertEquals(intTest, intGolden);
@@ -300,32 +303,10 @@ public class GameTest {
 
     @Test
     public void tileGetYWorks(){
-        Tile tileTest = new Tile(2, 7);
+        Tile tileTest = new Tile(2, 7,TileType.WALL);
         int intTest = tileTest.getY();
         int intGolden = 7;
         assertEquals(intTest, intGolden);
-    }
-
-    @Test
-    public void tileGetHeightWorks(){
-        Tile tileTest = new Tile();
-        int intTest = tileTest.getHeight();
-        int intGolden = 1; //Tiles init at height 1
-        assertEquals(intTest, intGolden);
-    }
-
-    @Test
-    public void tileGetFighterCanPassWorks(){
-        Tile tileTest = new Tile();
-        boolean boolTest = tileTest.getFightersCanPass();
-        assertTrue(boolTest);
-    }
-
-    @Test
-    public void tileGetProjectilesCanPassWorks(){
-        Tile tileTest = new Tile();
-        boolean boolTest = tileTest.getProjectilesCanPass();
-        assertTrue(boolTest);
     }
 
     @Test

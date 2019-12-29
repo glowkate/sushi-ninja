@@ -1,3 +1,8 @@
+/*
+    This class represents the fighters that the player and ai will control.
+    They hold and modify specific information based on what kind of fighter they are.
+ */
+
 public class Fighter {
 
     private int maxHp;

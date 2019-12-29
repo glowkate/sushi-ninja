@@ -1,25 +1,15 @@
-import org.hamcrest.Condition;
-
-import java.io.File;
 import java.util.*;
 
 /*
-    ~Tile Class~
+    Tile Class
     Stores and modifies tile graph information
-    Uses: Tile, Coord
-    Used by: Map
-
-    File documentation https://docs.oracle.com/javase/7/docs/api/java/io/File.html
-    List documentation https://docs.oracle.com/javase/8/docs/api/java/util/List.html
  */
 public class Tile {
 
     private final Coord XY;
-    private int height;
-    private File image;
 
-    private boolean fightersCanPass;
-    private boolean projectilesCanPass;
+    private final TileType type;
+
     private boolean hasBeenVisited;
     private LinkedList<Tile> pathToTile;
     private ArrayList<Tile> linked;
@@ -27,53 +17,24 @@ public class Tile {
     /*
         Class initialisation
      */
-    public Tile(final int INIT_X, final int INIT_Y){
+    public Tile(final int INIT_X, final int INIT_Y, final TileType INIT_TYPE){
         XY = new Coord(INIT_X, INIT_Y);
-
-        //Default vars
-        height = 1;
-        //IMAGE = INIT_IMAGE;
-        fightersCanPass = true;
-        projectilesCanPass = true;
-        //linked = Collections.<Tile>emptyList();
+        type = INIT_TYPE;
         linked = new ArrayList<Tile>();
         pathToTile = new LinkedList<>();
         hasBeenVisited = false;
     }
 
+    //For testing only
     public Tile(){
         XY = new Coord(0,0);
-        height = 1;
-        fightersCanPass = true;
-        projectilesCanPass = true;
+        type = TileType.OPENSPACE;
         //linked = Collections.<Tile>emptyList();
         linked = new ArrayList<Tile>();
     }
 
-    /*
-        Operation methods
-     */
     public void addLink(Tile newTile){
         linked.add(newTile);
-    }
-
-    public void setFightersCanPass(boolean newFightersCanPass){
-        System.out.println(newFightersCanPass);
-        fightersCanPass = newFightersCanPass;
-        System.out.println(fightersCanPass);
-    }
-
-    public void setProjectilesCanPass(boolean newProjectilesCanPass){
-        projectilesCanPass = newProjectilesCanPass;
-    }
-
-    public void setHeight(int h){
-        height = h;
-    }
-
-    public void setImage(File i){
-        //should check file type here
-        image = i;
     }
 
     public void setPathAndVisit(LinkedList<Tile> newPath){
@@ -87,17 +48,48 @@ public class Tile {
     }
 
     public boolean checkPassability(Tile compTile){
+        boolean areWePassable;
+        switch(type){
+            case GAP:
+            case WALL:
+                areWePassable = false;
+                break;
+            default:
+                areWePassable = true;
+                break;
+        }
         boolean isHeightPassable = !(heightDif(compTile) > 1); //If height diff is 2 or more, it's impassable
-        return (!hasBeenVisited && isHeightPassable && fightersCanPass);
+        return (!hasBeenVisited && isHeightPassable && areWePassable);
     }
 
     public int heightDif(Tile compTile){ //gets how much higher one tile is compared to this one
-        return(compTile.getHeight() - height);
+        int ourHeight;
+        int theirHeight;
+        switch(type){
+            case ELEVATED1:
+                ourHeight = 2;
+                break;
+            case ELEVATED2:
+                ourHeight = 3;
+                break;
+            default:
+                ourHeight = 1;
+                break;
+        }
+        switch(compTile.getType()){
+            case ELEVATED1:
+                theirHeight = 2;
+                break;
+            case ELEVATED2:
+                theirHeight = 3;
+                break;
+            default:
+                theirHeight = 1;
+                break;
+        }
+        return(theirHeight - ourHeight);
     }
 
-    /*
-        Return methods
-     */
     public Coord getXY(){
         return(XY);
     }
@@ -110,18 +102,9 @@ public class Tile {
         return(XY.getY());
     }
 
-    public int getHeight(){
-        return(height);
+    public TileType getType(){
+        return (type);
     }
-
-    public boolean getFightersCanPass(){
-        return(fightersCanPass);
-    }
-
-    public boolean getProjectilesCanPass(){
-        return(projectilesCanPass);
-    }
-
     public ArrayList<Tile> getLinked(){
         return(linked);
     }
@@ -134,12 +117,41 @@ public class Tile {
         return hasBeenVisited;
     }
 
-    public File getImage(){
-        return(image);
+    @Override
+    public String toString(){
+        String addString;
+        switch(type){
+            case WALL:
+                addString = "<WALL>";
+                break;
+            case OPENSPACE:
+                addString = "<OPENSPACE>";
+                break;
+            case GAP:
+                addString = "<GAP>";
+                break;
+            case ELEVATED1:
+                addString = "<ELEVATED1>";
+                break;
+            case ELEVATED2:
+                addString = "<ELEVATED2>";
+                break;
+            default:
+                addString = "";
+        }
+        return(XY.toString() + addString);
     }
 
     @Override
-    public String toString(){
-        return(XY.toString());
+    public boolean equals(Object obj){
+        if(obj == null || obj.getClass()!= this.getClass()) {
+            System.out.println("uh oh");
+            return false;
+        }
+        else {
+            Tile compTile = (Tile) obj;
+            return (XY.equals(compTile.getXY()) && type == compTile.getType());
+        }
+
     }
 }

@@ -1,3 +1,9 @@
+/*
+    A simple object that holds an X and a Y.
+    The required functions are in place to make
+    the class hashable.
+ */
+
 public class Coord {
     private int x;
     private int y;
@@ -20,12 +26,6 @@ public class Coord {
         return(y);
     }
 
-    /*
-        Methods to make Coord a valid hashtable key
-
-        Override is in place to catch errors in the hashtable functions
-        If it's not a valid hashtable function then the program will crash.
-     */
     @Override
     public String toString(){
         return (x + "," + y);
