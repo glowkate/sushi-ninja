@@ -11,6 +11,7 @@ public class Tile {
     private final TileType type;
 
     private boolean hasBeenVisited;
+    private boolean isOccupied;
     private LinkedList<Tile> pathToTile;
     private ArrayList<Tile> linked;
 
@@ -20,17 +21,18 @@ public class Tile {
     public Tile(final int INIT_X, final int INIT_Y, final TileType INIT_TYPE){
         XY = new Coord(INIT_X, INIT_Y);
         type = INIT_TYPE;
-        linked = new ArrayList<Tile>();
+        linked = new ArrayList<>();
         pathToTile = new LinkedList<>();
         hasBeenVisited = false;
+        isOccupied = false;
     }
 
     //For testing only
     public Tile(){
         XY = new Coord(0,0);
         type = TileType.OPENSPACE;
-        //linked = Collections.<Tile>emptyList();
-        linked = new ArrayList<Tile>();
+        linked = new ArrayList<>();
+        isOccupied = false;
     }
 
     public void addLink(Tile newTile){
@@ -42,24 +44,32 @@ public class Tile {
         hasBeenVisited = true;
     }
 
+    public void setOccupied(boolean newOccupied){
+        isOccupied = newOccupied;
+    }
+
+    public boolean getOccupied(){ //sEt GEt
+        return isOccupied;
+    }
+
     public void resetPathfindingVars(){
         hasBeenVisited = false;
         pathToTile.clear();
     }
 
     public boolean checkPassability(Tile compTile){
-        boolean areWePassable;
-        switch(type){
+        boolean areTheyPassable;
+        switch(compTile.getType()){
             case GAP:
             case WALL:
-                areWePassable = false;
+                areTheyPassable = false;
                 break;
             default:
-                areWePassable = true;
+                areTheyPassable = true;
                 break;
         }
         boolean isHeightPassable = !(heightDif(compTile) > 1); //If height diff is 2 or more, it's impassable
-        return (!hasBeenVisited && isHeightPassable && areWePassable);
+        return (!hasBeenVisited && !compTile.getOccupied() && isHeightPassable && areTheyPassable);
     }
 
     public int heightDif(Tile compTile){ //gets how much higher one tile is compared to this one
@@ -105,6 +115,7 @@ public class Tile {
     public TileType getType(){
         return (type);
     }
+
     public ArrayList<Tile> getLinked(){
         return(linked);
     }
@@ -116,6 +127,8 @@ public class Tile {
     public boolean getHasBeenVisited(){
         return hasBeenVisited;
     }
+
+
 
     @Override
     public String toString(){
@@ -145,7 +158,6 @@ public class Tile {
     @Override
     public boolean equals(Object obj){
         if(obj == null || obj.getClass()!= this.getClass()) {
-            System.out.println("uh oh");
             return false;
         }
         else {

@@ -67,8 +67,8 @@ public class GameTest {
     public void fighterActivateWorks(){
         Fighter fighterTest = new Fighter();
         Coord coordIn = new Coord();
-        fighterTest.activate(coordIn);
-        assertEquals(fighterTest.getFighterStatus(), Status.ACTIVE_ALIVE);
+        fighterTest.reset(coordIn);
+        assertEquals(fighterTest.getXY(), coordIn);
     }
 
     @Test
@@ -76,15 +76,14 @@ public class GameTest {
         Fighter fighterTest = new Fighter();
         fighterTest.takeDamage(5);
         assertEquals(fighterTest.getCrntHp(), 0);
-        assertEquals(fighterTest.getFighterStatus(), Status.ACTIVE_DEAD);
     }
 
     @Test
     public void fighterTakeHealingWorks(){
-        Fighter fighterTest = new Fighter(5,5,5,5);
-        fighterTest.takeDamage(4);
+        Fighter fighterTest = new Fighter();
+        fighterTest.takeDamage(2);
         fighterTest.takeHealing(10);
-        assertEquals(fighterTest.getCrntHp(), 5); //Healing shouldn't go above max HP
+        assertEquals(fighterTest.getCrntHp(), 3); //Healing shouldn't go above max HP
     }
 
     @Test void fighterSetXYWorks(){
@@ -105,44 +104,13 @@ public class GameTest {
     @Test
     public void fighterGetMaxHpWorks(){
         Fighter fighterTest = new Fighter();
-        assertEquals(fighterTest.getMaxHp(), 1);
+        assertEquals(fighterTest.getMaxHp(), 3);
     }
 
     @Test
     public void fighterGetCrntHpWorks(){
         Fighter fighterTest = new Fighter();
-        assertEquals(fighterTest.getCrntHp(), 1);
-    }
-
-    @Test
-    public void fighterGetCanMeleeAttackWorks(){
-        Fighter fighterTest = new Fighter();
-        assertFalse(fighterTest.getCanMeleeAttack());
-    }
-
-    @Test
-    public void fighterGetCanRangeAttackWorks(){
-        Fighter fighterTest = new Fighter();
-        assertFalse(fighterTest.getCanRangeAttack());
-    }
-
-    @Test
-    public void fighterGetCanMeleeHealWorks(){
-        Fighter fighterTest = new Fighter();
-        assertFalse(fighterTest.getCanMeleeHeal());
-    }
-
-    @Test
-    public void fighterGetCanRangeHealWorks(){
-        Fighter fighterTest = new Fighter();
-        assertFalse(fighterTest.getCanRangeHeal());
-    }
-
-    @Test
-    public void fighterGetNameWorks(){
-        Fighter fighterTest = new Fighter();
-        String stringGolden = "N/A";
-        assertEquals(fighterTest.getName(), stringGolden);
+        assertEquals(fighterTest.getCrntHp(), 3);
     }
 
     /*
@@ -200,6 +168,26 @@ public class GameTest {
 
         assertEquals(linkedComp.get(1), tileComp2);
         assertEquals(linkedComp.get(0), tileComp3);
+    }
+
+    @Test
+    public void mapCheckLineOfSightWorks(){
+        String strIn =
+                    "XXXXXXXXXX" +
+                    "     X   X" +
+                    "  X   VVV " +
+                    "   XXX V X" +
+                    " X        " +
+                    "    XX X  " +
+                    "XXXXXXXXXX";
+
+        Map mapTest = new Map(strIn);
+        Coord coordIn1A = new Coord(8, 1);
+        Coord coordIn1B = new Coord(6, 4);
+        Coord coordIn2A = new Coord(7, 1);
+        Coord coordIn2B = new Coord(4, 4);
+        assertTrue(mapTest.checkLineOfSight(coordIn1A, coordIn1B));
+        assertFalse(mapTest.checkLineOfSight(coordIn2A, coordIn2B));
     }
 
     @Test
@@ -272,7 +260,10 @@ public class GameTest {
         Tile tileTest = new Tile();
         Tile tileComp1 = new Tile(0,0,TileType.ELEVATED2);
         Tile tileComp2 = new Tile();
+        Tile tileComp3 = new Tile();
+        tileComp3.setOccupied(true);
         assertFalse(tileTest.checkPassability(tileComp1));
+        assertFalse(tileTest.checkPassability(tileComp3));
         assertTrue(tileTest.checkPassability(tileComp2));
     }
 

@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+/*
 class MyPanel extends JPanel {
 
     private BufferedImage i;
@@ -28,9 +29,10 @@ class MyPanel extends JPanel {
         g.drawImage(i, 96, 0, null);
     }
 };
-
+*/
 public class Main {
     public static void main(String[] args){
+        /*
         JFrame frame = new JFrame();
 
         frame.setPreferredSize(new Dimension(960, 672));
@@ -39,6 +41,10 @@ public class Main {
         frame.add(new MyPanel());
         frame.pack();
         frame.setVisible(true);
+        */
 
+
+        GameWorld gw = new GameWorld();
+        gw.drawStuff();
     }
 }

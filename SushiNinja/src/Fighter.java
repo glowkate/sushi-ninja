@@ -3,90 +3,45 @@
     They hold and modify specific information based on what kind of fighter they are.
  */
 
-public class Fighter {
+public class Fighter implements Comparable<Fighter>{
 
-    private int maxHp;
+    private final FighterType TYPE;
+
+    private final int maxHp;
     private int crntHp;
-    private int def;
-    private int attk;
-    private int speed;
+    private final int def;
+    private final int attk;
+    private final int speed;
 
-    private String name;
-
-    private Status fighterStatus;
     private Coord xy;
 
-    private boolean canMeleeAttack;
-    private boolean canRangeAttack;
-    private boolean canMeleeHeal;
-    private boolean canRangeHeal;
-
-    public Fighter(
-            final int INIT_HP,
-            final int INIT_DEF,
-            final int INIT_ATTK,
-            final int INIT_SPEED,
-            final String INIT_NAME,
-            final boolean INIT_FIGHTERCANMELEEATTACK,
-            final boolean INIT_FIGHTERCANRANGEATTACK,
-            final boolean INIT_FIGHTERCANMELEEHEAL,
-            final boolean INIT_FIGHTERCANRANGEHEAL
-    ){
-        maxHp = INIT_HP;
-        def = INIT_DEF;
-        attk = INIT_ATTK;
-        speed = INIT_SPEED;
-        name = INIT_NAME;
-
-
+    public Fighter(final FighterType INIT_TYPE){
+        TYPE = INIT_TYPE;
+        switch(TYPE) {
+            default:
+                maxHp = 3;
+                def = 0;
+                attk = 1;
+                speed = 2;
+                break;
+        }
 
         crntHp = maxHp;
         xy = new Coord(0,0);
-        fighterStatus = Status.INACTIVE;
-
-        canMeleeAttack = INIT_FIGHTERCANMELEEATTACK;
-        canRangeAttack = INIT_FIGHTERCANRANGEATTACK;
-        canMeleeHeal = INIT_FIGHTERCANMELEEHEAL;
-        canRangeHeal = INIT_FIGHTERCANRANGEHEAL;
-    }
-
-    public Fighter(final int INIT_HP, final int INIT_DEF, final int INIT_ATTK, final int INIT_SPEED){
-        maxHp = INIT_HP;
-        def = INIT_DEF;
-        attk = INIT_ATTK;
-        speed = INIT_SPEED;
-        crntHp = maxHp;
-
-        name = "N/A";
-
-        xy = new Coord(0,0);
-        fighterStatus = Status.INACTIVE;
-
-        canMeleeAttack = false;
-        canRangeAttack = false;
-        canMeleeHeal = false;
-        canRangeHeal = false;
     }
 
     public Fighter(){
-        maxHp = 1;
+        TYPE = FighterType.SMALLTEST;
+        maxHp = 3;
         def = 0;
         attk = 1;
         speed = 2;
-        name = "N/A";
 
         crntHp = maxHp;
         xy = new Coord(0,0);
-        fighterStatus = Status.INACTIVE;
-
-        canMeleeAttack = false;
-        canRangeAttack = false;
-        canMeleeHeal = false;
-        canRangeHeal = false;
     }
 
-    public void activate(Coord startXY){
-        fighterStatus = Status.ACTIVE_ALIVE;
+    public void reset(Coord startXY){
         crntHp = maxHp;
         setXY(startXY);
     }
@@ -95,7 +50,6 @@ public class Fighter {
         crntHp =- damage;
         if(crntHp <= 0){
             crntHp = 0;
-            fighterStatus = Status.ACTIVE_DEAD;
         }
     }
 
@@ -111,55 +65,48 @@ public class Fighter {
     }
 
     public void setXY(int x, int y){
-        Coord newCoord = new Coord(x,y);
-        xy = newCoord;
+        xy = new Coord(x,y);
     }
 
     public int getMaxHp(){
-        return maxHp;
+        return (maxHp);
     }
 
     public int getCrntHp(){
-        return crntHp;
+        return (crntHp);
     }
 
     public int getAttk(){
-        return attk;
+        return (attk);
     }
 
     public int getDef(){
-        return def;
+        return (def);
     }
 
     public int getSpeed(){
-        return speed;
-    }
-
-    public boolean getCanMeleeAttack(){
-        return canMeleeAttack;
-    }
-
-    public boolean getCanRangeAttack(){
-        return canRangeAttack;
-    }
-
-    public boolean getCanMeleeHeal(){
-        return canMeleeHeal;
-    }
-
-    public boolean getCanRangeHeal(){
-        return canRangeHeal;
-    }
-
-    public Status getFighterStatus(){
-        return fighterStatus;
-    }
-
-    public String getName(){
-        return name;
+        return (speed);
     }
 
     public Coord getXY(){
-        return xy;
+        return (xy);
+    }
+
+    public FighterType getType(){
+        return (TYPE);
+    }
+
+    /*
+       This function allows us to sort Fighters.
+       Fighters shall be sorted by drawing priority.
+       The higher the Y value, the higher the priority.
+    */
+    @Override
+    public int compareTo(Fighter fighter) {
+        Coord compCoord = fighter.getXY();
+        int compY = compCoord.getY();
+        int ourY = xy.getY();
+
+        return ourY - compY;
     }
 }

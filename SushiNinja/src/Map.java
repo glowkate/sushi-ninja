@@ -49,6 +49,31 @@ public class Map {
         tiles.put(newTile.getXY(), newTile);
     }
 
+    public boolean checkLineOfSight(Coord ogCoords, Coord targetCoords){
+        final double OG_X = ogCoords.getX() + 0.5;
+        final double OG_Y = ogCoords.getY() + 0.5;
+        final double TG_X = targetCoords.getX() + 0.5;
+        final double TG_Y = targetCoords.getY() + 0.5;
+        double crntX;
+        double crntY;
+        Coord crntCoord;
+        Tile crntTile;
+        for(double t = 0.0; t <= 1.0; t += 0.01){
+            crntX = OG_X + t * (TG_X - OG_X);
+            crntY = OG_Y + t * (TG_Y - OG_Y);
+            crntCoord = new Coord((int)crntX, (int)crntY);
+            crntTile = getTile(crntCoord);
+            /*
+                If I make any more tiles that projectiles can't pass through, I'll add them.
+             */
+            switch(crntTile.getType()){
+                case WALL:
+                    return false;
+            }
+        }
+        return true;
+    }
+
     public LinkedList<Tile> getFighterPath(Coord startCoords, Coord endCoords){
         Tile crntTile = (Tile)tiles.get(startCoords);
         Tile endTile = (Tile)tiles.get(endCoords);
