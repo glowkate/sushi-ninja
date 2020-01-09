@@ -77,6 +77,7 @@ public class Fighter implements Comparable<Fighter>{
             }
         }
         MAP.getTile(xy).setOccupied(true);
+
     }
 
     public int calcDamage(final RangeType MELEE_OR_RANGED){
@@ -170,9 +171,9 @@ public class Fighter implements Comparable<Fighter>{
         return (def);
     }
 
-    //public int getSpeed(){
-    //    return (speed);
-    //}
+    public int getCrntMove(){
+        return (crntMove);
+    }
 
     public Coord getXY(){
         return (xy);
