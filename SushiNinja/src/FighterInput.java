@@ -1,4 +1,4 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /*
     An interface to be used by classes with the job of giving fighters instructions.
@@ -6,5 +6,5 @@ import java.util.LinkedList;
  */
 
 public interface FighterInput {
-    public LinkedList<Coord> makePath(Fighter crntFighter);
+    public void doTurn(final Fighter FIGHTER, final Map MAP, final ArrayList<Fighter> ACTIVE_FIGHTERS);
 }

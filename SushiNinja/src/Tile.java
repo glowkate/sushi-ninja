@@ -69,6 +69,10 @@ public class Tile {
                 break;
         }
         boolean isHeightPassable = !(heightDif(compTile) > 1); //If height diff is 2 or more, it's impassable
+        //System.out.println(!hasBeenVisited);
+        //System.out.println(!compTile.getOccupied());
+        //System.out.println(isHeightPassable);
+        //System.out.println(areTheyPassable);
         return (!hasBeenVisited && !compTile.getOccupied() && isHeightPassable && areTheyPassable);
     }
 

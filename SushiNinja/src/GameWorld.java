@@ -7,8 +7,14 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+/*
+    This class will be in charge of creating and organising all other classes.
+    It contains the main game loop. (er...it will)
+ */
+
 public class GameWorld{
     JFrame gameFrame;
+
     public GameWorld(){
         gameFrame = new JFrame();
 

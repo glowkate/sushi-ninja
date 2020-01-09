@@ -72,6 +72,31 @@ public class GameTest {
     }
 
     @Test
+    public void fighterMoveFighterWorks(){
+        Fighter fighterTest = new Fighter();
+        fighterTest.reset(new Coord(0,0));
+        Map mapTest = new Map(
+                "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          ");
+        Coord coordIn1 = new Coord(0,0);
+        Coord coordIn2 = new Coord(0, 4);
+        LinkedList<Tile> listIn = mapTest.getFighterPath(coordIn1, coordIn2);
+
+
+        fighterTest.moveFighter(listIn, mapTest);
+        Coord coordGolden = new Coord(0, 2);
+        Coord coordTest = fighterTest.getXY();
+        boolean boolTest = mapTest.getTile(0, 2).getOccupied();
+        assertEquals(coordGolden, coordTest);
+        assertTrue(boolTest);
+    }
+
+    @Test
     public void fighterTakeDamageWorks(){
         Fighter fighterTest = new Fighter();
         fighterTest.takeDamage(5);
@@ -133,8 +158,6 @@ public class GameTest {
         Tile tileGolden3 = new Tile(6,4,TileType.GAP);
         Tile tileGolden4 = new Tile(9,6,TileType.WALL);
 
-        System.out.println(mapTest.getTile(0,0));
-        System.out.println(tileGolden1);
 
         assertEquals(tileGolden1, mapTest.getTile(0,0));
         assertEquals(tileGolden2, mapTest.getTile(9,0));
@@ -154,7 +177,14 @@ public class GameTest {
 
     @Test
     public void mapLinkMapWorks(){
-        Map mapTest = new Map(2, 2);
+        Map mapTest = new Map(
+                "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          ");
 
         Coord coordComp1 = new Coord(0,0);
         Coord coordComp2 = new Coord(0,1);
@@ -192,7 +222,14 @@ public class GameTest {
 
     @Test
     public void mapGetFighterPathWorks(){
-        Map mapTest = new Map(3, 3);
+        Map mapTest = new Map(
+                "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          " +
+                        "          ");
         Coord coordIn1 = new Coord(0,0);
         Coord coordIn2 = new Coord(1,2);
         LinkedList<Tile> pathTest = mapTest.getFighterPath(coordIn1, coordIn2);

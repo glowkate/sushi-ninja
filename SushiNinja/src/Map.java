@@ -16,9 +16,11 @@ public class Map {
         Initialisation
      */
 
-    public Map(String init_map){
+    public Map(String initMap){
         tiles = new Hashtable();
-        makeMap(init_map);
+        makeMap(initMap);
+        maxX = 10;
+        maxY = 7;
         linkMap();
     }
 
@@ -66,9 +68,8 @@ public class Map {
             /*
                 If I make any more tiles that projectiles can't pass through, I'll add them.
              */
-            switch(crntTile.getType()){
-                case WALL:
-                    return false;
+            if (crntTile.getType() == TileType.WALL) {
+                return false;
             }
         }
         return true;
@@ -86,8 +87,14 @@ public class Map {
 
         while(crntTile != endTile && queFull){
             crntLinked = crntTile.getLinked();
+            //System.out.println(crntTile);
+            //System.out.println(crntLinked);
+            //System.out.println("===========");
             for(Tile t : crntLinked){
+                //System.out.println(t);
+                //System.out.println(t.checkPassability(crntTile));
                 if (t.checkPassability(crntTile)){
+                    //System.out.println("added");
                     crntPath = (LinkedList<Tile>) crntTile.getPath().clone();
                     crntPath.offer(crntTile);
                     t.setPathAndVisit(crntPath);
@@ -101,22 +108,36 @@ public class Map {
                 crntTile = que.pop();
             }
         }
+
+        LinkedList<Tile> returnPath;
         if (crntTile == endTile) {
             crntTile.getPath().offer(crntTile);
-            return (crntTile.getPath());
+            returnPath = (LinkedList<Tile>) crntTile.getPath().clone();
         }
         else {
-            return (new LinkedList<>());
+            returnPath = new LinkedList<>();
         }
+
+        //once path is found, reset vars.
+        Tile resetTile;
+        Coord resetCoord;
+        for(int x = 0; x < maxX; x++){
+            for(int y = 0; y < maxY; y++){
+                resetCoord = new Coord(x, y);
+                resetTile = getTile(resetCoord);
+                resetTile.resetPathfindingVars();
+            }
+        }
+        return (returnPath);
     }
 
-    private void makeMap(String init_map){
+    private void makeMap(String initMap){
         char crntChar;
         Tile toAddTile;
         int crntX = 0;
         int crntY = 0;
-        for(int i = 0; i < init_map.length(); i++) {
-            crntChar = init_map.charAt(i);
+        for(int i = 0; i < initMap.length(); i++) {
+            crntChar = initMap.charAt(i);
             switch (crntChar) {
                 case (' '):
                     toAddTile = new Tile(crntX, crntY, TileType.OPENSPACE);
@@ -170,7 +191,9 @@ public class Map {
                 tile2 = (Tile)tiles.get(nextCoord);
 
                 linkTiles(tile1, tile2);
-
+                //System.out.println(tile1);
+                //System.out.println(tile2);
+                //System.out.println("are linked");
                 lastCoord = nextCoord;
             }
         }
