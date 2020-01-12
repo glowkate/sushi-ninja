@@ -1,3 +1,3 @@
 public enum FighterTeam {
-    PLAYER, ALLIED, ENEMY;
+    PLAYER, ALLIED, ENEMY
 }

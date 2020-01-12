@@ -1,10 +1,5 @@
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /*
@@ -32,7 +27,7 @@ public class GameWorld{
         Fighter fighterIn1 = new Fighter(FighterType.SMALLTEST);
         fighterIn1.reset(new Coord(2, 2));
 
-        Fighter fighterIn2 = new Fighter(FighterType.TALLTEST);
+        Fighter fighterIn2 = new Fighter(FighterType.FRIENDTEST);
         fighterIn2.reset(new Coord(2, 1));
 
         Fighter fighterIn3 = new Fighter(FighterType.TALLTEST);

@@ -25,6 +25,13 @@ public class Fighter implements Comparable<Fighter>{
         hitCount = 0;
         TYPE = INIT_TYPE;
         switch(TYPE) {
+            case FRIENDTEST:
+                TEAM = FighterTeam.ALLIED;
+                MAX_HP = 3;
+                def = 0;
+                attk = 1;
+                MAX_MOVE = 2;
+                break;
             default:
                 TEAM = FighterTeam.ENEMY;
                 MAX_HP = 3;
@@ -163,14 +170,6 @@ public class Fighter implements Comparable<Fighter>{
         return (crntHp);
     }
 
-    public int getAttk(){
-        return (attk);
-    }
-
-    public int getDef(){
-        return (def);
-    }
-
     public int getCrntMove(){
         return (crntMove);
     }
@@ -189,6 +188,25 @@ public class Fighter implements Comparable<Fighter>{
 
     public int getHitCount(){
         return (hitCount);
+    }
+
+    @Override
+    public String toString(){
+        String addString;
+        switch(TYPE){
+            case SMALLTEST:
+                addString = "<SMALLTEST>";
+                break;
+            case TALLTEST:
+                addString = "<TALLTEST>";
+                break;
+            case FRIENDTEST:
+                addString = "<FRIENDTEST>";
+                break;
+            default:
+                addString = "<>";
+        }
+        return(xy.toString() + addString);
     }
 
     /*

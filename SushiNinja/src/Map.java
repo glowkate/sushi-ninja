@@ -1,5 +1,3 @@
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /*
@@ -34,7 +32,7 @@ public class Map {
     //For testing only
     public Map(){
         tiles = new Hashtable();
-        makeMap(1, 1);
+        makeMap(10, 8);
         linkMap();
     }
 
@@ -87,14 +85,8 @@ public class Map {
 
         while(crntTile != endTile && queFull){
             crntLinked = crntTile.getLinked();
-            //System.out.println(crntTile);
-            //System.out.println(crntLinked);
-            //System.out.println("===========");
             for(Tile t : crntLinked){
-                //System.out.println(t);
-                //System.out.println(t.checkPassability(crntTile));
                 if (t.checkPassability(crntTile)){
-                    //System.out.println("added");
                     crntPath = (LinkedList<Tile>) crntTile.getPath().clone();
                     crntPath.offer(crntTile);
                     t.setPathAndVisit(crntPath);
@@ -191,9 +183,6 @@ public class Map {
                 tile2 = (Tile)tiles.get(nextCoord);
 
                 linkTiles(tile1, tile2);
-                //System.out.println(tile1);
-                //System.out.println(tile2);
-                //System.out.println("are linked");
                 lastCoord = nextCoord;
             }
         }

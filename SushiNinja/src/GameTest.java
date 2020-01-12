@@ -60,6 +60,111 @@ public class GameTest {
     }
 
     /*
+        CpuInput class tests
+     */
+
+    @Test
+    public void cpuGetOpponentsWorks(){
+        CpuInput cpuInputTest = new CpuInput();
+
+        Fighter fighterIn1 = new Fighter(FighterType.TALLTEST);
+        Fighter fighterIn2 = new Fighter(FighterType.SMALLTEST);
+        Fighter fighterIn3 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterIn4 = new Fighter(FighterType.FRIENDTEST);
+
+        ArrayList<Fighter> arrayIn = new ArrayList<>();
+
+        ArrayList<Fighter> arrayGolden1 = new ArrayList<>();
+        ArrayList<Fighter> arrayGolden2 = new ArrayList<>();
+
+        ArrayList<Fighter> arrayTest1;
+        ArrayList<Fighter> arrayTest2;
+
+        arrayIn.add(fighterIn1);
+        arrayIn.add(fighterIn2);
+        arrayIn.add(fighterIn3);
+        arrayIn.add(fighterIn4);
+
+        arrayGolden1.add(fighterIn1);
+        arrayGolden1.add(fighterIn2);
+
+        arrayGolden2.add(fighterIn3);
+        arrayGolden2.add(fighterIn4);
+
+        arrayTest1 = cpuInputTest.getOpponents(arrayIn, fighterIn3);
+        arrayTest2 = cpuInputTest.getOpponents(arrayIn, fighterIn1);
+
+        assertEquals(arrayGolden1, arrayTest1);
+        assertEquals(arrayGolden2, arrayTest2);
+    }
+
+    @Test
+    public void cpuGetClosestLOSWorks(){
+        CpuInput cpuInputTest = new CpuInput();
+
+        Map mapIn = new Map(
+                "     VV   " +
+                        "     VV   " +
+                        "     VV   " +
+                        "     VV   " +
+                        "XXXXXXXXXX" +
+                        "          " +
+                        "          ");
+
+        ArrayList<Fighter> fightersIn = new ArrayList<>();
+
+        Fighter fighterIn1 = new Fighter();
+        Fighter fighterIn2 = new Fighter();
+        Fighter fighterIn3 = new Fighter();
+
+        Fighter fighterIn4 = new Fighter();
+        fighterIn4.setXY(2,3);
+
+        fighterIn1.setXY(2,5);
+        fighterIn2.setXY(7,3);
+        fighterIn3.setXY(0,0);
+
+        fightersIn.add(fighterIn1);
+        fightersIn.add(fighterIn2);
+        fightersIn.add(fighterIn3);
+
+        Fighter fighterGolden = cpuInputTest.getClosestLOS(fighterIn4, fightersIn, mapIn);
+
+        assertEquals(fighterGolden, fighterIn2);
+    }
+
+    @Test
+    public void cpuInputGetClosestPathWorks(){
+        CpuInput cpuInputTest = new CpuInput();
+
+        Map mapIn = new Map();
+        ArrayList<Fighter> fightersIn = new ArrayList<>();
+        Fighter fighterIn1 = new Fighter();
+        Fighter fighterIn2 = new Fighter();
+        Fighter fighterIn3 = new Fighter();
+
+        Fighter fighterIn4 = new Fighter();
+        fighterIn4.setXY(2,2);
+
+        fighterIn1.setXY(4,4);
+        fighterIn2.setXY(2,4);
+        fighterIn3.setXY(5,2);
+
+        fightersIn.add(fighterIn1);
+        fightersIn.add(fighterIn2);
+        fightersIn.add(fighterIn3);
+
+        LinkedList<Tile> pathGolden = new LinkedList<>();
+        pathGolden.offer(new Tile(2, 2, TileType.OPENSPACE));
+        pathGolden.offer(new Tile(2, 3, TileType.OPENSPACE));
+        pathGolden.offer(new Tile(2, 4, TileType.OPENSPACE));
+
+        LinkedList<Tile> pathTest = cpuInputTest.getClosestPath(fighterIn4, fightersIn, mapIn);
+
+        assertEquals(pathTest, pathGolden);
+    }
+
+    /*
         Fighter class tests
      */
 

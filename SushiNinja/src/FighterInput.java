@@ -6,5 +6,5 @@ import java.util.ArrayList;
  */
 
 public interface FighterInput {
-    public void doTurn(final Fighter FIGHTER, final Map MAP, final ArrayList<Fighter> ACTIVE_FIGHTERS);
+    void doTurn(final Fighter FIGHTER, final Map MAP, final ArrayList<Fighter> ACTIVE_FIGHTERS);
 }

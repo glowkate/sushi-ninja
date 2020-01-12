@@ -3,5 +3,5 @@
  */
 
 public enum FighterType {
-    SMALLTEST, TALLTEST;
+    SMALLTEST, TALLTEST, FRIENDTEST
 }

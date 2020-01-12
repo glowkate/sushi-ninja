@@ -20,6 +20,7 @@ public class MapFrame extends JPanel {
     //Fighters
     private BufferedImage smallFighterImage;
     private BufferedImage tallFighterImage;
+    private BufferedImage friendFighterImage;
 
     public MapFrame(final Map INIT_MAP) {
         MAP = INIT_MAP;
@@ -33,6 +34,7 @@ public class MapFrame extends JPanel {
             //Fighters
             smallFighterImage = ImageIO.read(new File("data/placeholderFighterSmall.png"));
             tallFighterImage = ImageIO.read(new File("data/placeholderFighterTall.png"));
+            friendFighterImage = ImageIO.read(new File("data/placeholderFighterAlly.png"));
         } catch (IOException e) {
             assert(false);
         }
@@ -79,19 +81,21 @@ public class MapFrame extends JPanel {
                     isTall = true;
                     crntImage = tallFighterImage;
                     break;
+                case FRIENDTEST:
+                    isTall = false;
+                    crntImage = friendFighterImage;
+                    break;
                 default:
                     isTall = false; //these are here as formality for java. A crash should occur here.
                     crntImage = smallFighterImage;
-                    assert (false);
+                    assert(false);
                     break;
             }
             crntCoord = f.getXY();
             if(isTall){
-                System.out.println("Tall");
                 g.drawImage(crntImage, crntCoord.getX() * 96, crntCoord.getY() * 96 - 48, null);
             }
             else {
-                System.out.println("Small");
                 g.drawImage(crntImage, crntCoord.getX() * 96, crntCoord.getY() * 96, null);
             }
         }
