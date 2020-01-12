@@ -32,6 +32,9 @@ public class MapFrame extends JPanel {
         FRAME = new JFrame();
         FRAME.setPreferredSize(new Dimension(960, 672));
         FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        FRAME.add(this);
+        FRAME.pack();
+        FRAME.setVisible(true);
 
         try {
             //Tiles
@@ -53,9 +56,7 @@ public class MapFrame extends JPanel {
     }
 
     public void drawSelf(){
-        FRAME.add(this);
-        FRAME.pack();
-        FRAME.setVisible(true);
+        repaint();
     }
 
     @Override
@@ -86,7 +87,9 @@ public class MapFrame extends JPanel {
         ArrayList<Fighter> drawOrder = new ArrayList<>();
         drawOrder = (ArrayList<Fighter>) active.clone();
         Collections.sort(drawOrder);
+        System.out.println("Draw Run");
         for(Fighter f : drawOrder){
+            System.out.println(f);
             FighterType crntType = f.getType();
             switch(crntType){
                 case SMALLTEST:

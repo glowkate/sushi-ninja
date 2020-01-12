@@ -119,7 +119,7 @@ public class CpuInput{
         int crntPathLen;
         int bestPathLen = -1;
         Fighter bestTarget = null;
-        //System.out.println(OPPONENTS);
+        System.out.println(OPPONENTS);
         //figure out the closest (best) target. In case of a tie, attack the one that's been attacked less
         for(Fighter crntTarget : OPPONENTS){
             crntCoord = crntTarget.getXY();
