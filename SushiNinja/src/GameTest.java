@@ -65,8 +65,6 @@ public class GameTest {
 
     @Test
     public void cpuGetOpponentsWorks(){
-        CpuInput cpuInputTest = new CpuInput();
-
         Fighter fighterIn1 = new Fighter(FighterType.TALLTEST);
         Fighter fighterIn2 = new Fighter(FighterType.SMALLTEST);
         Fighter fighterIn3 = new Fighter(FighterType.FRIENDTEST);
@@ -91,8 +89,8 @@ public class GameTest {
         arrayGolden2.add(fighterIn3);
         arrayGolden2.add(fighterIn4);
 
-        arrayTest1 = cpuInputTest.getOpponents(arrayIn, fighterIn3);
-        arrayTest2 = cpuInputTest.getOpponents(arrayIn, fighterIn1);
+        arrayTest1 = CpuInput.getOpponents(arrayIn, fighterIn3);
+        arrayTest2 = CpuInput.getOpponents(arrayIn, fighterIn1);
 
         assertEquals(arrayGolden1, arrayTest1);
         assertEquals(arrayGolden2, arrayTest2);
@@ -100,8 +98,6 @@ public class GameTest {
 
     @Test
     public void cpuGetClosestLOSWorks(){
-        CpuInput cpuInputTest = new CpuInput();
-
         Map mapIn = new Map(
                 "     VV   " +
                         "     VV   " +
@@ -128,15 +124,13 @@ public class GameTest {
         fightersIn.add(fighterIn2);
         fightersIn.add(fighterIn3);
 
-        Fighter fighterGolden = cpuInputTest.getClosestLOS(fighterIn4, fightersIn, mapIn);
+        Fighter fighterGolden = CpuInput.getClosestLOS(fighterIn4, fightersIn, mapIn);
 
         assertEquals(fighterGolden, fighterIn2);
     }
 
     @Test
     public void cpuInputGetClosestPathWorks(){
-        CpuInput cpuInputTest = new CpuInput();
-
         Map mapIn = new Map();
         ArrayList<Fighter> fightersIn = new ArrayList<>();
         Fighter fighterIn1 = new Fighter();
@@ -159,7 +153,7 @@ public class GameTest {
         pathGolden.offer(new Tile(2, 3, TileType.OPENSPACE));
         pathGolden.offer(new Tile(2, 4, TileType.OPENSPACE));
 
-        LinkedList<Tile> pathTest = cpuInputTest.getClosestPath(fighterIn4, fightersIn, mapIn);
+        LinkedList<Tile> pathTest = CpuInput.getClosestPath(fighterIn4, fightersIn, mapIn);
 
         assertEquals(pathTest, pathGolden);
     }
@@ -170,16 +164,16 @@ public class GameTest {
 
     @Test
     public void fighterActivateWorks(){
+        Map mapIn = new Map();
         Fighter fighterTest = new Fighter();
         Coord coordIn = new Coord();
-        fighterTest.reset(coordIn);
+        fighterTest.reset(coordIn, mapIn);
         assertEquals(fighterTest.getXY(), coordIn);
     }
 
     @Test
     public void fighterMoveFighterWorks(){
-        Fighter fighterTest = new Fighter();
-        fighterTest.reset(new Coord(0,0));
+
         Map mapTest = new Map(
                 "          " +
                         "          " +
@@ -188,6 +182,10 @@ public class GameTest {
                         "          " +
                         "          " +
                         "          ");
+
+        Fighter fighterTest = new Fighter();
+        fighterTest.reset(new Coord(0,0), mapTest);
+
         Coord coordIn1 = new Coord(0,0);
         Coord coordIn2 = new Coord(0, 4);
         LinkedList<Tile> listIn = mapTest.getFighterPath(coordIn1, coordIn2);
@@ -405,7 +403,7 @@ public class GameTest {
         Tile tileComp3 = new Tile();
         tileComp3.setOccupied(true);
         assertFalse(tileTest.checkPassability(tileComp1));
-        assertFalse(tileTest.checkPassability(tileComp3));
+        assertTrue(tileTest.checkPassability(tileComp3));
         assertTrue(tileTest.checkPassability(tileComp2));
     }
 

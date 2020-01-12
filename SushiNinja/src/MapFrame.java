@@ -1,3 +1,4 @@
+import java.util.List;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,6 +12,8 @@ import javax.swing.*;
 public class MapFrame extends JPanel {
     private final Map MAP;
     private ArrayList<Fighter> active;
+    private String displayText;
+    final JFrame FRAME;
 
     //Tiles
     private BufferedImage wallImage;
@@ -22,9 +25,14 @@ public class MapFrame extends JPanel {
     private BufferedImage tallFighterImage;
     private BufferedImage friendFighterImage;
 
-    public MapFrame(final Map INIT_MAP) {
+    public MapFrame(final Map INIT_MAP, final ArrayList<Fighter> INIT_FIGHTERS) {
         MAP = INIT_MAP;
-        active = new ArrayList<>();
+        active = INIT_FIGHTERS;
+
+        FRAME = new JFrame();
+        FRAME.setPreferredSize(new Dimension(960, 672));
+        FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         try {
             //Tiles
             wallImage = ImageIO.read(new File("data/placeholderWall.png"));
@@ -40,8 +48,14 @@ public class MapFrame extends JPanel {
         }
     }
 
-    public void setActive(ArrayList<Fighter> newActive){
-        active = newActive;
+    public void setDisplayText(String newDisplayText){
+        displayText = newDisplayText;
+    }
+
+    public void drawSelf(){
+        FRAME.add(this);
+        FRAME.pack();
+        FRAME.setVisible(true);
     }
 
     @Override
@@ -69,8 +83,10 @@ public class MapFrame extends JPanel {
         BufferedImage crntImage;
         Coord crntCoord;
         boolean isTall;
-        Collections.sort(active);
-        for(Fighter f : active){
+        ArrayList<Fighter> drawOrder = new ArrayList<>();
+        drawOrder = (ArrayList<Fighter>) active.clone();
+        Collections.sort(drawOrder);
+        for(Fighter f : drawOrder){
             FighterType crntType = f.getType();
             switch(crntType){
                 case SMALLTEST:

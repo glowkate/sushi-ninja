@@ -45,10 +45,12 @@ public class Tile {
     }
 
     public void setOccupied(boolean newOccupied){
+        //System.out.println("Setting tile " + this + " to " + newOccupied);
         isOccupied = newOccupied;
     }
 
     public boolean getOccupied(){ //sEt GEt
+        //System.out.println("Getting occupied from " + this + " being " + isOccupied);
         return isOccupied;
     }
 
@@ -57,9 +59,10 @@ public class Tile {
         pathToTile.clear();
     }
 
-    public boolean checkPassability(Tile compTile){
+    //This is called from the DESTINATION, not the source
+    public boolean checkPassability(Tile source){
         boolean areTheyPassable;
-        switch(compTile.getType()){
+        switch(type){
             case GAP:
             case WALL:
                 areTheyPassable = false;
@@ -68,12 +71,13 @@ public class Tile {
                 areTheyPassable = true;
                 break;
         }
-        boolean isHeightPassable = !(heightDif(compTile) > 1); //If height diff is 2 or more, it's impassable
+        boolean isHeightPassable = !(heightDif(source) > 1); //If height diff is 2 or more, it's impassable
+        //System.out.println("Check Passability");
         //System.out.println(!hasBeenVisited);
-        //System.out.println(!compTile.getOccupied());
+        //System.out.println(!isOccupied);
         //System.out.println(isHeightPassable);
         //System.out.println(areTheyPassable);
-        return (!hasBeenVisited && !compTile.getOccupied() && isHeightPassable && areTheyPassable);
+        return (!hasBeenVisited && !isOccupied && isHeightPassable && areTheyPassable);
     }
 
     public int heightDif(Tile compTile){ //gets how much higher one tile is compared to this one

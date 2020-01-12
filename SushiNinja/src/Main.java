@@ -3,41 +3,36 @@
  */
 //package com.techub.exeute;
 
+import java.util.ArrayList;
 
-/*
-class MyPanel extends JPanel {
-
-    private BufferedImage i;
-
-    public MyPanel() {
-        try {
-            i = ImageIO.read(new File("data/placeholderWall.png"));
-        } catch (IOException e) {
-        }
-    }
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(i, 0, 0, null);
-        g.drawImage(i, 96, 0, null);
-    }
-};
-*/
 public class Main {
     public static void main(String[] args){
-        /*
-        JFrame frame = new JFrame();
+        String strIn =
+                "XXXXXXXXXX" +
+                "X        X" +
+                "X   V    X" +
+                "X   VV   X" +
+                "X  VVV   X" +
+                "X        X" +
+                "XXXXXXXXXX";
 
-        frame.setPreferredSize(new Dimension(960, 672));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Map mapIn = new Map(strIn);
 
-        frame.add(new MyPanel());
-        frame.pack();
-        frame.setVisible(true);
-        */
+        Fighter fighterIn1 = new Fighter(FighterType.SMALLTEST);
+        fighterIn1.reset(new Coord(6, 4), mapIn);
 
+        Fighter fighterIn2 = new Fighter(FighterType.FRIENDTEST);
+        fighterIn2.reset(new Coord(0, 0), mapIn);
 
-        GameWorld gw = new GameWorld();
-        gw.drawStuff();
+        //Fighter fighterIn3 = new Fighter(FighterType.TALLTEST);
+        //fighterIn3.reset(new Coord(2, 3), mapIn);
+
+        ArrayList<Fighter> listIn = new ArrayList<>();
+        listIn.add(fighterIn1);
+        listIn.add(fighterIn2);
+        //listIn.add(fighterIn3);
+
+        GameWorld gw = new GameWorld(new Map(), listIn);
+        gw.runGame();
     }
 }

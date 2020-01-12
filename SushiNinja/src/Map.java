@@ -85,8 +85,11 @@ public class Map {
 
         while(crntTile != endTile && queFull){
             crntLinked = crntTile.getLinked();
+            //System.out.println(crntTile);
+            //System.out.println("=======");
             for(Tile t : crntLinked){
-                if (t.checkPassability(crntTile)){
+                //System.out.println(t);
+                if (t.checkPassability(crntTile) || t == endTile){
                     crntPath = (LinkedList<Tile>) crntTile.getPath().clone();
                     crntPath.offer(crntTile);
                     t.setPathAndVisit(crntPath);

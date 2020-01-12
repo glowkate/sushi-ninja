@@ -3,6 +3,7 @@
     They hold and modify specific information based on what kind of fighter they are.
  */
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -10,6 +11,8 @@ public class Fighter implements Comparable<Fighter>{
 
     private final FighterType TYPE;
     private final FighterTeam TEAM;
+
+    private final String NAME;
 
     private final int MAX_HP;
     private int crntHp;
@@ -26,13 +29,31 @@ public class Fighter implements Comparable<Fighter>{
         TYPE = INIT_TYPE;
         switch(TYPE) {
             case FRIENDTEST:
+                NAME = "Melee Ally";
                 TEAM = FighterTeam.ALLIED;
                 MAX_HP = 3;
                 def = 0;
                 attk = 1;
                 MAX_MOVE = 2;
                 break;
+            case TALLTEST:
+                NAME = "Ranged Enemy";
+                TEAM = FighterTeam.ENEMY;
+                MAX_HP = 3;
+                def = 0;
+                attk = 1;
+                MAX_MOVE = 2;
+                break;
+            case SMALLTEST:
+                NAME = "Melee Enemy";
+                TEAM = FighterTeam.ENEMY;
+                MAX_HP = 3;
+                def = 0;
+                attk = 1;
+                MAX_MOVE = 2;
+                break;
             default:
+                NAME = "Enemy";
                 TEAM = FighterTeam.ENEMY;
                 MAX_HP = 3;
                 def = 0;
@@ -49,6 +70,7 @@ public class Fighter implements Comparable<Fighter>{
         hitCount = 0;
         TEAM = FighterTeam.ENEMY;
         TYPE = FighterType.SMALLTEST;
+        NAME = "Melee Enemy";
         MAX_HP = 3;
         def = 0;
         attk = 1;
@@ -59,14 +81,20 @@ public class Fighter implements Comparable<Fighter>{
         xy = new Coord(0,0);
     }
 
-    public void reset(Coord startXY){
+    public void reset(Coord startXY, Map map){
         hitCount = 0;
         crntHp = MAX_HP;
         crntMove = MAX_MOVE;
         setXY(startXY);
+        map.getTile(startXY).setOccupied(true);
     }
 
     //moveFighter and attackFighter will handle any graphics
+    public void moveAndDraw(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
+        moveFighter(PATH, MAP);
+        FRAME.drawSelf();
+    }
+
     public void moveFighter(final LinkedList<Tile> PATH, final Map MAP){
         MAP.getTile(xy).setOccupied(false);
         xy = PATH.get(0).getXY();
@@ -84,7 +112,6 @@ public class Fighter implements Comparable<Fighter>{
             }
         }
         MAP.getTile(xy).setOccupied(true);
-
     }
 
     public int calcDamage(final RangeType MELEE_OR_RANGED){
@@ -131,11 +158,13 @@ public class Fighter implements Comparable<Fighter>{
     }
 
     //I've divided the RNG portion of attacking from what's ultimately to be called to make it so it can be tested.
-    public void attackFighter(final int DAMAGE, final int DEFENCE, final Fighter TARGET){
+    public void attackFighter(final int DAMAGE, final int DEFENCE, final Fighter TARGET, final MapFrame GAME_FRAME){
         int ULT_DAMAGE = DAMAGE - DEFENCE;
         if(ULT_DAMAGE < 0){
             ULT_DAMAGE = 0; //no negative damage on my watch
         }
+        GAME_FRAME.setDisplayText(NAME + " hit " + TARGET.getName() + " " + ULT_DAMAGE + " times!");
+        GAME_FRAME.drawSelf();
         TARGET.takeDamage(ULT_DAMAGE);
     }
 
@@ -160,6 +189,10 @@ public class Fighter implements Comparable<Fighter>{
 
     public void setXY(int x, int y){
         xy = new Coord(x,y);
+    }
+
+    public String getName(){
+        return (NAME);
     }
 
     public int getMaxHp(){

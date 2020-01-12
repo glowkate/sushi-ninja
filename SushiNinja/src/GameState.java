@@ -1,0 +1,3 @@
+public enum GameState {
+    PLAYERTURN, ALLYTURN, ENEMYTURN, SETUP, STARTTURN;
+}
