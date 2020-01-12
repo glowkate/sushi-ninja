@@ -6,6 +6,7 @@
 import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Fighter implements Comparable<Fighter>{
 
@@ -91,10 +92,37 @@ public class Fighter implements Comparable<Fighter>{
 
     //moveFighter and attackFighter will handle any graphics
     public void moveAndDraw(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
-        moveFighter(PATH, MAP);
-        FRAME.drawSelf();
+        moveFighter(PATH, MAP, FRAME);
+        //FRAME.drawSelf();
     }
 
+    public void moveFighter(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
+        MAP.getTile(xy).setOccupied(false);
+        xy = PATH.get(0).getXY();
+        Tile crntTile;
+        Tile lastTile = PATH.get(0);
+        boolean keepMoving = true;
+        for(int i = 1; i < PATH.size() && crntMove > 0 && keepMoving; i++){ //because getFighterPath includes the start tile, we start at the second tile when moving
+            crntTile = PATH.get(i);
+            if (crntTile.checkPassability(lastTile)){
+                xy = crntTile.getXY();
+                crntMove -= 1;
+                FRAME.drawSelf();
+                try {
+                    Thread.sleep(250);
+                }
+                catch (Exception e){
+
+                }
+            }
+            else{
+                keepMoving = false;
+            }
+        }
+        MAP.getTile(xy).setOccupied(true);
+    }
+
+    //FOR TESTING ONLY
     public void moveFighter(final LinkedList<Tile> PATH, final Map MAP){
         MAP.getTile(xy).setOccupied(false);
         xy = PATH.get(0).getXY();

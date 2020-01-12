@@ -23,6 +23,9 @@ public class CpuInput{
                             ultPath.offer(bestPath.get(1));
                             FIGHTER.moveAndDraw(ultPath, MAP, GAME_FRAME);
                         }
+                        else {
+                            break; //if you can't reach the target, break
+                        }
                     }
                     else{ //if a target was found, attack it.
                         int fighterAttc = FIGHTER.calcDamage(RangeType.RANGED);
