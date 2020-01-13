@@ -52,7 +52,7 @@ public class GameWorld{
                 case ENEMYTURN:
                     for(Fighter f : activeFighters){
                         if(f.getTeam() == FighterTeam.ENEMY){
-                            CpuInput.doTurn(f, MAP, Collections.unmodifiableList(activeFighters), frame);
+                            CpuInput.doTurn(f, MAP, activeFighters, frame);
                         }
                     }
                     state = GameState.PLAYERTURN;
@@ -91,13 +91,13 @@ public class GameWorld{
         Map mapIn = new Map(strIn);
 
         Fighter fighterIn1 = new Fighter(FighterType.SMALLTEST);
-        fighterIn1.reset(new Coord(2, 2), mapIn);
+        fighterIn1.placeOnMap(new Coord(2, 2), mapIn);
 
         Fighter fighterIn2 = new Fighter(FighterType.FRIENDTEST);
-        fighterIn2.reset(new Coord(2, 1), mapIn);
+        fighterIn2.placeOnMap(new Coord(2, 1), mapIn);
 
         Fighter fighterIn3 = new Fighter(FighterType.TALLTEST);
-        fighterIn3.reset(new Coord(2, 3), mapIn);
+        fighterIn3.placeOnMap(new Coord(2, 3), mapIn);
 
         ArrayList<Fighter> listIn = new ArrayList<>();
         listIn.add(fighterIn1);

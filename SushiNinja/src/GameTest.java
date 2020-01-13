@@ -167,7 +167,7 @@ public class GameTest {
         Map mapIn = new Map();
         Fighter fighterTest = new Fighter();
         Coord coordIn = new Coord();
-        fighterTest.reset(coordIn, mapIn);
+        fighterTest.placeOnMap(coordIn, mapIn);
         assertEquals(fighterTest.getXY(), coordIn);
     }
 
@@ -184,7 +184,7 @@ public class GameTest {
                         "          ");
 
         Fighter fighterTest = new Fighter();
-        fighterTest.reset(new Coord(0,0), mapTest);
+        fighterTest.placeOnMap(new Coord(0,0), mapTest);
 
         Coord coordIn1 = new Coord(0,0);
         Coord coordIn2 = new Coord(0, 4);

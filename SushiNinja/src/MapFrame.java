@@ -111,9 +111,7 @@ public class MapFrame extends JPanel {
         ArrayList<Fighter> drawOrder = new ArrayList<>();
         drawOrder = (ArrayList<Fighter>) active.clone();
         Collections.sort(drawOrder);
-       // System.out.println("Draw Run");
         for(Fighter f : drawOrder){
-           // System.out.println(f);
             if (f.getState() == FighterState.ALIVE) {
                 FighterType crntType = f.getType();
                 switch (crntType) {
@@ -143,7 +141,6 @@ public class MapFrame extends JPanel {
                     g.drawImage(crntImage, crntCoord.getX() * 96, crntCoord.getY() * 96, null);
                 }
             }
-            //System.out.println(displayText);
             g.drawString(displayText, (int)(4.5 * 96.0), (int)(7.25 * 96));
 
             if(ogCoords != null && targetCoords != null){

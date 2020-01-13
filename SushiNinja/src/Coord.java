@@ -13,6 +13,7 @@ public class Coord {
         y = initY;
     }
 
+    //FOR TESTING ONLY
     public Coord(){
         x = 0;
         y = 0;

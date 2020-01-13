@@ -1,20 +1,69 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
+
+/*
+    This is a static class in charge of holding the functions that make a fighter
+    do it's turn. The doTurn function uses 3 subfunctions.
+
+    A fighter's turn works like so.
+    -Find out who my foes are.
+    If I'm a ranged fighter...
+        POINT A
+        - Who is the least attacked target that I can hit?
+        If I can't hit anyone...
+            - Find the closest fighter
+            If I can't reach any fighters...
+                 -Do nothing
+            Otherwise
+                -Take ONE step towards it. Go back to point A.
+        If I can hit someone...
+            -Attack them and stop.
+    If I'm a melee fighter...
+        -Who is the closest target?
+        If I can't reach any fighters...
+            -Do nothing
+        Otherwise
+            -Move towards target
+            If I'm adjacent to them...
+                -Attack them
+ */
+
+/*
+    This is the only function that should be called from other classes (testing excluded), every
+    other function in this class should only be used by this function. This function takes a
+    fighter and calculates plus preform it's turn.
+
+    final Fighter FIGHTER - This is the fighter we are currently controlling. We accsess the
+        information stored within, along with an RNG call for attacking
+    final Map MAP - This is the map that we are playing on. Used to store what spaced are occupied,
+        if one tile has line of sight to another, and how to get from one tile to another.
+    final ArrayList<Fighter> ACTIVE_FIGHTERS - These are the fighters currently in play.
+        Includes both dead and alive fighters. Used for finding the FIGHTER's opponents.
+    final MapFrame GAME_FRAME - The screen we are drawing on. We don't use it but we give it to
+        functions in fighter to allow them to update the screen.
+ */
 
 public class CpuInput{
-    public static void doTurn(final Fighter FIGHTER, final Map MAP, final List<Fighter> ACTIVE_FIGHTERS, final MapFrame GAME_FRAME){
+    public static void doTurn(final Fighter FIGHTER, final Map MAP, final ArrayList<Fighter> ACTIVE_FIGHTERS, final MapFrame GAME_FRAME){
         if (FIGHTER.getState() == FighterState.ALIVE){
+
+            //Gets the fighter's opponents out of the ACTIVE FIGHTERS.
+            //Active fighters is no longer used.
             ArrayList<Fighter> opponents = getOpponents(ACTIVE_FIGHTERS, FIGHTER);
+
+            //Preforms Melee or Ranged AI based on the fighter's type.
             final FighterType F_TYPE = FIGHTER.getType();
             switch (F_TYPE) {
-                //Ranged types go here.
+
+                //RANGED FIGHTER TYPES
                 case TALLTEST:
-                    while (FIGHTER.getCrntMove() > 0) { //while the fighter can move...
-                        //check to see who the best target is.
+                case SPOONGHOST:
+                    while (FIGHTER.getCrntMove() > 0) {
+
+                        //Gets the least hit target that the fighter can see.
                         Fighter bestTarget = getClosestLOS(FIGHTER, opponents, MAP);
 
-                        if (bestTarget == null) { //if no target was found...
+                        if (bestTarget == null) { //It there's no viable targets...
                             LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
 
                             if (bestPath != null && bestPath.size() != 0) {
@@ -36,6 +85,10 @@ public class CpuInput{
                     break; //if you run out of movement or you hit a target, stop.
 
                 //Melee types go here.
+                case FORKGHOST:
+                case FOODGHOSTA:
+                case FOODGHOSTB:
+                case SOUL:
                 case FRIENDTEST:
                 case SMALLTEST:
 
@@ -45,7 +98,6 @@ public class CpuInput{
                     Fighter bestTarget = null;
                     //figure out what target we selected
                     for (Fighter f : opponents) {
-                        //System.out.println(bestPath);
                         if (MAP.getTile(f.getXY()) == bestPath.getLast()) {
                             bestTarget = f;
                             break;
@@ -76,7 +128,16 @@ public class CpuInput{
         }
     }
 
-    public static ArrayList<Fighter> getOpponents(final List<Fighter> ACTIVE_FIGHTERS, final Fighter FIGHTER){
+    /*
+        This is a function to be used by doTurn. Given a list of fighters and one single "pov" fighter
+        the function will return an ArrayList<Fighter> of who the pov fighter can attack.
+
+        final ArrayList<Fighter> ACTIVE_FIGHTERS - The fighters currently on the board. Iterated through
+            to get all the potential foes.
+        final Fighter FIGHTER - The fighter who the program is getting the
+     */
+
+    public static ArrayList<Fighter> getOpponents(final ArrayList<Fighter> ACTIVE_FIGHTERS, final Fighter FIGHTER){
         ArrayList<Fighter> opponents = new ArrayList<>();
         final FighterTeam AI_TEAM = FIGHTER.getTeam();
         FighterTeam crntFighterTeam;
@@ -98,6 +159,18 @@ public class CpuInput{
         return(opponents);
     }
 
+    /*
+        Given a fighter, a list of opponents, and the map, this function find out
+        what the least hit opponent that the fighter has line of sight on is.
+
+        final Fighter FIGHTER - The fighter, who's coords are used as the point of
+            origin in the LoS method.
+        final ArrayList<Fighter> OPPONENTS - The list of potential targets. Iterated
+            through to see who is closest.
+        final Map MAP - The map that the game is happening on. Used to check if two
+            co-ordinates have line of sigh on each other.
+     */
+
     public static Fighter getClosestLOS(final Fighter FIGHTER, final ArrayList<Fighter> OPPONENTS, final Map MAP){
         Fighter bestTarget = null;
         for(Fighter f : OPPONENTS) {
@@ -113,6 +186,20 @@ public class CpuInput{
         return (bestTarget);
     }
 
+    /*
+        Given a fighter, a list of opponents, and the map, this function find out
+        what the closest opponent that the fighter can move to is. If two fighters
+        are tied in terms of how close they are, it targets the one that's been
+        attacked less.
+
+        final Fighter FIGHTER - The fighter, who's coords are used as the start
+            coord in the pathfinding method.
+        final ArrayList<Fighter> OPPONENTS - The list of potential targets. Iterated
+            through and used at the end coord in the pathfinding method.
+        final Map MAP - The map that the game is happening on. Used to produce a
+            path between two co-ordinates.
+     */
+
     public static LinkedList<Tile> getClosestPath(final Fighter FIGHTER, final ArrayList<Fighter> OPPONENTS, final Map MAP){
         Coord ourCoord = FIGHTER.getXY();
         LinkedList<Tile> crntPath;
@@ -121,14 +208,11 @@ public class CpuInput{
         int crntPathLen;
         int bestPathLen = -1;
         Fighter bestTarget = null;
-        System.out.println(OPPONENTS);
         //figure out the closest (best) target. In case of a tie, attack the one that's been attacked less
         for(Fighter crntTarget : OPPONENTS){
             crntCoord = crntTarget.getXY();
             crntPath = MAP.getFighterPath(ourCoord, crntCoord);
             crntPathLen = crntPath.size();
-            //System.out.println(ourCoord);
-            //System.out.println(crntCoord);
             if(crntPathLen != 0) {
                 if (bestPathLen == -1) {
                     bestPathLen = crntPathLen;

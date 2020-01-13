@@ -45,12 +45,10 @@ public class Tile {
     }
 
     public void setOccupied(boolean newOccupied){
-        //System.out.println("Setting tile " + this + " to " + newOccupied);
         isOccupied = newOccupied;
     }
 
     public boolean getOccupied(){ //sEt GEt
-        //System.out.println("Getting occupied from " + this + " being " + isOccupied);
         return isOccupied;
     }
 
@@ -72,11 +70,6 @@ public class Tile {
                 break;
         }
         boolean isHeightPassable = !(heightDif(source) > 1); //If height diff is 2 or more, it's impassable
-        //System.out.println("Check Passability");
-        //System.out.println(!hasBeenVisited);
-        //System.out.println(!isOccupied);
-        //System.out.println(isHeightPassable);
-        //System.out.println(areTheyPassable);
         return (!hasBeenVisited && !isOccupied && isHeightPassable && areTheyPassable);
     }
 
