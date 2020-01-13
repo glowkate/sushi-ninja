@@ -10,9 +10,9 @@ public class Main {
         String strIn =
                 "     X    " +
                 "     X    " +
-                "   X X    " +
-                "XX X XXX X" +
-                "  X  X   X" +
+                "   X V    " +
+                "XX X VVV X" +
+                "  X  V   X" +
                 "         X" +
                 "XXXXXXXXXX";
 

@@ -4,78 +4,76 @@ import java.util.List;
 
 public class CpuInput{
     public static void doTurn(final Fighter FIGHTER, final Map MAP, final List<Fighter> ACTIVE_FIGHTERS, final MapFrame GAME_FRAME){
-        ArrayList<Fighter> opponents = getOpponents(ACTIVE_FIGHTERS, FIGHTER);
-        final FighterType F_TYPE = FIGHTER.getType();
-        switch (F_TYPE){
-            //Ranged types go here.
-            case TALLTEST:
-                while(FIGHTER.getCrntMove() > 0) { //while the fighter can move...
-                    //check to see who the best target is.
-                    Fighter bestTarget = getClosestLOS(FIGHTER, opponents, MAP);
+        if (FIGHTER.getState() == FighterState.ALIVE){
+            ArrayList<Fighter> opponents = getOpponents(ACTIVE_FIGHTERS, FIGHTER);
+            final FighterType F_TYPE = FIGHTER.getType();
+            switch (F_TYPE) {
+                //Ranged types go here.
+                case TALLTEST:
+                    while (FIGHTER.getCrntMove() > 0) { //while the fighter can move...
+                        //check to see who the best target is.
+                        Fighter bestTarget = getClosestLOS(FIGHTER, opponents, MAP);
 
-                    if(bestTarget == null){ //if no target was found...
-                        LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
+                        if (bestTarget == null) { //if no target was found...
+                            LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
 
-                        if (bestPath != null && bestPath.size() != 0) {
-                            //move 1 step towards it.
-                            LinkedList<Tile> ultPath = new LinkedList<>();
-                            ultPath.offer(bestPath.get(0));
-                            ultPath.offer(bestPath.get(1));
-                            FIGHTER.moveAndDraw(ultPath, MAP, GAME_FRAME);
+                            if (bestPath != null && bestPath.size() != 0) {
+                                //move 1 step towards it.
+                                LinkedList<Tile> ultPath = new LinkedList<>();
+                                ultPath.offer(bestPath.get(0));
+                                ultPath.offer(bestPath.get(1));
+                                FIGHTER.moveFighter(ultPath, MAP, GAME_FRAME);
+                            } else {
+                                break; //if you can't reach the target, break
+                            }
+                        } else { //if a target was found, attack it.
+                            int fighterAttc = FIGHTER.calcDamage(RangeType.RANGED);
+                            int targetDef = bestTarget.calcDefence();
+                            FIGHTER.attackFighter(fighterAttc, targetDef, bestTarget, MAP, GAME_FRAME);
+                            break;
                         }
-                        else {
-                            break; //if you can't reach the target, break
+                    }
+                    break; //if you run out of movement or you hit a target, stop.
+
+                //Melee types go here.
+                case FRIENDTEST:
+                case SMALLTEST:
+
+                    //figure out the closest path to a target. In case of a tie, attack the one that's been attacked less
+                    LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
+
+                    Fighter bestTarget = null;
+                    //figure out what target we selected
+                    for (Fighter f : opponents) {
+                        //System.out.println(bestPath);
+                        if (MAP.getTile(f.getXY()) == bestPath.getLast()) {
+                            bestTarget = f;
+                            break;
                         }
                     }
-                    else{ //if a target was found, attack it.
-                        int fighterAttc = FIGHTER.calcDamage(RangeType.RANGED);
-                        int targetDef = bestTarget.calcDefence();
-                        FIGHTER.attackFighter(fighterAttc, targetDef, bestTarget, GAME_FRAME);
-                        break;
+
+                    //move the dude.
+                    if (bestPath != null && bestPath.size() != 0) {
+                        FIGHTER.moveFighter(bestPath, MAP, GAME_FRAME);
                     }
-                }
-                break; //if you run out of movement or you hit a target, stop.
 
-            //Melee types go here.
-            case FRIENDTEST:
-            case SMALLTEST:
-
-                //figure out the closest path to a target. In case of a tie, attack the one that's been attacked less
-                LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
-
-                Fighter bestTarget = null;
-                //figure out what target we selected
-                for(Fighter f : opponents){
-                    //System.out.println(bestPath);
-                    if(MAP.getTile(f.getXY()) == bestPath.getLast()){
-                        bestTarget = f;
-                        break;
+                    if (bestTarget != null) {
+                        //if next to best target after move, attack it
+                        Tile fighterTile = MAP.getTile(FIGHTER.getXY());
+                        Tile targetTile = MAP.getTile(bestTarget.getXY());
+                        if (fighterTile.getLinked().contains(targetTile)) {
+                            int fighterDamage = FIGHTER.calcDamage(RangeType.MELEE);
+                            int targetDef = bestTarget.calcDefence();
+                            FIGHTER.attackFighter(fighterDamage, targetDef, bestTarget, MAP, GAME_FRAME);
+                        }
                     }
-                }
-
-                //move the dude.
-                if (bestPath != null && bestPath.size() != 0) {
-                    FIGHTER.moveAndDraw(bestPath, MAP, GAME_FRAME);
-                }
-
-                if(bestTarget != null) {
-                    //if next to best target after move, attack it
-                    int xDif = FIGHTER.getXY().getX() - bestTarget.getXY().getX();
-                    int yDif = FIGHTER.getXY().getY() - bestTarget.getXY().getY();
-                    xDif = Math.abs(xDif);
-                    yDif = Math.abs(yDif);
-                    if (xDif == 1 ^ yDif == 1) { // ^ is an XOR in java. Prevents diagonal attacking.
-                        int fighterDamage = FIGHTER.calcDamage(RangeType.MELEE);
-                        int targetDef = bestTarget.calcDefence();
-                        FIGHTER.attackFighter(fighterDamage, targetDef, bestTarget, GAME_FRAME);
-                    }
-                }
-                break;
-            //if the fighter can't attack they sit on their bum.
-            default:
-                break;
+                    break;
+                //if the fighter can't attack they sit on their bum.
+                default:
+                    break;
+            }
+            FIGHTER.resetMove();
         }
-        FIGHTER.resetMove();
     }
 
     public static ArrayList<Fighter> getOpponents(final List<Fighter> ACTIVE_FIGHTERS, final Fighter FIGHTER){
@@ -84,15 +82,16 @@ public class CpuInput{
         FighterTeam crntFighterTeam;
         //This loops figures out what Fighters are the AI's opponents.
         for(Fighter f : ACTIVE_FIGHTERS){
-            crntFighterTeam = f.getTeam();
-            if (AI_TEAM == FighterTeam.ENEMY) {
-                if (crntFighterTeam == FighterTeam.PLAYER || crntFighterTeam == FighterTeam.ALLIED) {
-                    opponents.add(f);
-                }
-            }
-            else {
-                if (crntFighterTeam == FighterTeam.ENEMY) {
-                    opponents.add(f);
+            if (f.getState() == FighterState.ALIVE) {
+                crntFighterTeam = f.getTeam();
+                if (AI_TEAM == FighterTeam.ENEMY) {
+                    if (crntFighterTeam == FighterTeam.PLAYER || crntFighterTeam == FighterTeam.ALLIED) {
+                        opponents.add(f);
+                    }
+                } else {
+                    if (crntFighterTeam == FighterTeam.ENEMY) {
+                        opponents.add(f);
+                    }
                 }
             }
         }

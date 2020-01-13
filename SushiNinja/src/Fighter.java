@@ -3,15 +3,14 @@
     They hold and modify specific information based on what kind of fighter they are.
  */
 
-import javax.swing.*;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Fighter implements Comparable<Fighter>{
 
     private final FighterType TYPE;
     private final FighterTeam TEAM;
+    private FighterState state;
 
     private final String NAME;
 
@@ -28,13 +27,14 @@ public class Fighter implements Comparable<Fighter>{
     public Fighter(final FighterType INIT_TYPE){
         hitCount = 0;
         TYPE = INIT_TYPE;
+        state = FighterState.ALIVE;
         switch(TYPE) {
             case FRIENDTEST:
                 NAME = "Melee Ally";
                 TEAM = FighterTeam.ALLIED;
-                MAX_HP = 3;
+                MAX_HP = 6;
                 def = 0;
-                attk = 1;
+                attk = 3;
                 MAX_MOVE = 2;
                 break;
             case TALLTEST:
@@ -68,6 +68,7 @@ public class Fighter implements Comparable<Fighter>{
     }
 
     public Fighter(){
+        state = FighterState.ALIVE;
         hitCount = 0;
         TEAM = FighterTeam.ENEMY;
         TYPE = FighterType.SMALLTEST;
@@ -90,12 +91,6 @@ public class Fighter implements Comparable<Fighter>{
         map.getTile(startXY).setOccupied(true);
     }
 
-    //moveFighter and attackFighter will handle any graphics
-    public void moveAndDraw(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
-        moveFighter(PATH, MAP, FRAME);
-        //FRAME.drawSelf();
-    }
-
     public void moveFighter(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
         MAP.getTile(xy).setOccupied(false);
         xy = PATH.get(0).getXY();
@@ -112,7 +107,6 @@ public class Fighter implements Comparable<Fighter>{
                     Thread.sleep(250);
                 }
                 catch (Exception e){
-
                 }
             }
             else{
@@ -186,23 +180,39 @@ public class Fighter implements Comparable<Fighter>{
     }
 
     //I've divided the RNG portion of attacking from what's ultimately to be called to make it so it can be tested.
-    public void attackFighter(final int DAMAGE, final int DEFENCE, final Fighter TARGET, final MapFrame GAME_FRAME){
+    public void attackFighter(final int DAMAGE, final int DEFENCE, final Fighter TARGET, final Map MAP, final MapFrame GAME_FRAME){
         int ULT_DAMAGE = DAMAGE - DEFENCE;
         if(ULT_DAMAGE < 0){
             ULT_DAMAGE = 0; //no negative damage on my watch
         }
-        GAME_FRAME.setDisplayText(NAME + " hit " + TARGET.getName() + " " + ULT_DAMAGE + " times!");
-        GAME_FRAME.drawSelf();
-        TARGET.takeDamage(ULT_DAMAGE);
+        GAME_FRAME.hitFighter(TARGET.getXY(), xy);
+        GAME_FRAME.displayText(NAME + " hit " + TARGET.getName() + " " + ULT_DAMAGE + " times!");
+        TARGET.takeDamage(ULT_DAMAGE, MAP, GAME_FRAME);
     }
 
-    public void takeDamage(final int DAMAGE){
-        crntHp =- DAMAGE;
+    public void takeDamage(final int DAMAGE, final Map MAP , final MapFrame GAME_FRAME){
+        System.out.println(crntHp);
+        System.out.println(DAMAGE);
+        crntHp = crntHp - DAMAGE;
         if(crntHp <= 0){
-            crntHp = 0; //GameWorld will figure out what fighters die
+            GAME_FRAME.displayText(NAME + " has fallen.");
+            crntHp = 0;
+            state = FighterState.DEAD;
+            MAP.getTile(xy).setOccupied(false);
         }
         hitCount += 1;
     }
+
+    //FOR TESTING ONLY
+    public void takeDamage(final int DAMAGE){
+        crntHp =- DAMAGE;
+        if(crntHp <= 0){
+            crntHp = 0;
+            state = FighterState.DEAD;
+        }
+        hitCount += 1;
+    }
+
 
     public void takeHealing(int healing){
         crntHp =+ healing;
@@ -249,6 +259,10 @@ public class Fighter implements Comparable<Fighter>{
 
     public int getHitCount(){
         return (hitCount);
+    }
+
+    public FighterState getState(){
+        return (state);
     }
 
     @Override

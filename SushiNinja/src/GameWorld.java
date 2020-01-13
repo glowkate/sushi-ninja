@@ -38,31 +38,6 @@ public class GameWorld{
             }
             switch (state){
                 case SETUP:
-                    /*
-                case STARTURN:
-
-                        At the start of each round, check to see if one of the teems is dead.
-
-                    boolean friendlyTeamAlive = false;
-                    boolean opposingTeamAlive = false;
-                    for(Fighter f : aliveFighters){
-                        if (f.getTeam() == FighterTeam.ENEMY){
-                            opposingTeamAlive = true;
-                        }
-                        else{
-                            friendlyTeamAlive = true;
-                        }
-                    }
-
-
-                    if(!friendlyTeamAlive || !opposingTeamAlive){
-                        runGame = false;
-                    }
-
-                    state = GameState.PLAYERTURN;
-                    break;
-                    */
-
                 case PLAYERTURN:
                     state = GameState.ALLYTURN;
                     break;
@@ -90,10 +65,10 @@ public class GameWorld{
             boolean friendlyTeamAlive = false;
             boolean opposingTeamAlive = false;
             for(Fighter f : activeFighters){
-                if (f.getTeam() == FighterTeam.ENEMY){
+                if (f.getState() == FighterState.ALIVE && f.getTeam() == FighterTeam.ENEMY){
                     opposingTeamAlive = true;
                 }
-                else{
+                else if (f.getState() == FighterState.ALIVE){
                     friendlyTeamAlive = true;
                 }
             }
