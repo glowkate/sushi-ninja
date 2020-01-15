@@ -1,11 +1,11 @@
-/*
-    The main class. Starts the program.
- */
-//package com.techub.exeute;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
+/*
+    The main class. Organises everything before the game starts such as making the maps and fighters
+    used in the game.
+ */
 public class Main {
     public static void main(String[] args){
 

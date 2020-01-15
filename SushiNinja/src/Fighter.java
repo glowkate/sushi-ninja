@@ -275,6 +275,10 @@ public class Fighter implements Comparable<Fighter>{
         TARGET.takeDamage(ULT_DAMAGE, MAP, GAME_FRAME);
     }
 
+    /*
+        Given the amount of damage to be delt, it deals said amount of damage to self.
+        Updates graphics if necessary and sets flags if the fighter dies.
+     */
     public void takeDamage(final int DAMAGE, final Map MAP , final MapFrame GAME_FRAME){
         crntHp = crntHp - DAMAGE;
         if(crntHp <= 0){
@@ -297,6 +301,9 @@ public class Fighter implements Comparable<Fighter>{
     }
 
 
+    /*
+        Heals fighters. Health can never go over max hp.
+     */
     public void takeHealing(int healing){
         crntHp =+ healing;
         if(crntHp > MAX_HP){
@@ -348,6 +355,9 @@ public class Fighter implements Comparable<Fighter>{
         return (state);
     }
 
+    /*
+        String is made up of: X,Y<TYPE>
+     */
     @Override
     public String toString(){
         String addString;

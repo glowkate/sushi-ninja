@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /*
     This class is for holding the tests for other classes to ensure they work properly.
+    Each test is organised by what class it's from.
  */
 
 public class GameTest {

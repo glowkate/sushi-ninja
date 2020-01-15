@@ -1,7 +1,14 @@
 import java.util.*;
 
 /*
-    Class used for creating, storing, and running operations on a dictionary of tiles.
+    This class creates, stores, and runs operations on a dictionary of tiles. Used by most classes to
+    move fighters, check where they are, and provide data on what they can do. In charge of caluating
+    paths for the fighters to move on and checking if a fighter can shoot another fighter.
+
+    private Dictionary tiles - where all the tiles are stored. Each tile's key is the Coord where they're
+        located. This is why Coord is hashable. Used by most methods in Map.
+    private int maxX - The X size of the map. For most maps will be 10. Used by linkMap.
+    private int maxY - The Y size of the map. For most maps will be 7. Used by linkMap.
  */
 
 public class Map {
@@ -10,9 +17,6 @@ public class Map {
     private int maxX;
     private int maxY;
 
-    /*
-        Initialisation
-     */
 
     public Map(String initMap){
         tiles = new Hashtable();
@@ -37,7 +41,7 @@ public class Map {
     }
 
     /*
-        Private methods
+        Used on init by linkMap to link up 2 tiles to one another.
      */
 
     private void linkTiles(Tile tile1, Tile tile2){
@@ -45,10 +49,21 @@ public class Map {
         tile2.addLink(tile1);
     }
 
+    /*
+        Used on init by makeMap. Adds a tile to the map.
+     */
+
     public void addTile(Tile newTile){
         tiles.put(newTile.getXY(), newTile);
     }
 
+    /*
+        Given two Coords, finds out if they have line of sight on one another.
+        Stats at origin and calculates the line linking the two. Goes through
+        the line bit by bit, checking what tile it's standing on. If it finds
+        a tile that blocks LoS, returns false. If it gets to the destination without
+        resistance, returns true.
+     */
     public boolean checkLineOfSight(Coord ogCoords, Coord targetCoords){
         final double OG_X = ogCoords.getX() + 0.5;
         final double OG_Y = ogCoords.getY() + 0.5;
@@ -73,6 +88,12 @@ public class Map {
         return true;
     }
 
+    /*
+        Finds the closest path from the startCoord to the endCoord using
+        breadth first search. Stores tiles to check out using a que and stores
+        paths to tiles by giving them the path take to them. Returns an
+        empty list if it can't find it's way to the tile.
+     */
     public LinkedList<Tile> getFighterPath(Coord startCoords, Coord endCoords){
         Tile crntTile = (Tile)tiles.get(startCoords);
         Tile endTile = (Tile)tiles.get(endCoords);
@@ -123,6 +144,10 @@ public class Map {
         return (returnPath);
     }
 
+    /*
+        Called on init. Makes the map via a string. Each char in the string is a different tileType.
+        This way we can make a map quickly and edit it easily.
+     */
     private void makeMap(String initMap){
         char crntChar;
         Tile toAddTile;
@@ -170,6 +195,9 @@ public class Map {
         }
     }
 
+    /*
+        Goes through the rows and columns of the map and links them together.
+     */
     private void linkMap(){
         Coord lastCoord;
         Coord nextCoord;
@@ -202,6 +230,9 @@ public class Map {
         }
     }
 
+    /*
+        Gets a tile from the map. Used by other classes to manipulate tiles.
+     */
     public Tile getTile(Coord locationCoord){
         return((Tile)tiles.get(locationCoord));
     }
@@ -211,13 +242,3 @@ public class Map {
         return((Tile)tiles.get(location));
     }
 }
-
-
-/*
-        for (Enumeration i = tiles.elements(); i.hasMoreElements();)
-        {
-            i.nextElement();
-        }
-
-        if I want to iterate over the elements in tiles
- */

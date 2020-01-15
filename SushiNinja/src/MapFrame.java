@@ -1,4 +1,3 @@
-import java.util.List;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,6 +7,22 @@ import java.util.Collections;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+/*
+    Class responsible for the GUI of the program. Tells a JFrame what it wants it to draw. Given the
+    active fighters and a map.
+
+    private final Map MAP - The map being drawn by this MapFrame. Used by paintComponent.
+    private ArrayList<Fighter> active - The fighters being drawn by this MapFrame. Used by paintComponent.
+    private String displayText - The text currently being displayed. Used by paintComponent.
+        Changed by displayText().
+    final JFrame FRAME - The JFrame drawing the MapFrame. Used on init.
+
+    private Coord - targetCoords - Used by hitFighter and paintComponent to draw a line indicating an attack.
+    private Coord - ogCoords - Used by hitFighter and paintComponent to draw a line indicating an attack.
+
+    private BufferedImage - Vars used to store images to be used by paintComponent. Represent a tile or fighter.
+ */
 
 public class MapFrame extends JPanel {
     private final Map MAP;
@@ -59,12 +74,18 @@ public class MapFrame extends JPanel {
         }
     }
 
+    /*
+        Sets hit line vars and updates the screen.
+     */
     public void hitFighter(Coord target, Coord origin){
         ogCoords = origin;
         targetCoords = target;
         drawSelf();
     }
 
+    /*
+        Displays text on screen for around 3 seconds. Resets any hit lines afterwards.
+     */
     public void displayText(String newDisplayText){
         displayText = newDisplayText;
         drawSelf();
@@ -79,10 +100,16 @@ public class MapFrame extends JPanel {
         targetCoords = null;
     }
 
+    /*
+        Used to update the image on screen.
+     */
     public void drawSelf(){
         repaint();
     }
 
+    /*
+        Called by JFrame. Draws everything.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         //Drawing tiles

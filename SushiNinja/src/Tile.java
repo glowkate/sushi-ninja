@@ -1,9 +1,19 @@
 import java.util.*;
 
 /*
-    Tile Class
-    Stores and modifies tile graph information
+    Stores and modifies tile graph information. Used by Map and accessed by a fair amount of classes and methods.
+
+    private final Coord XY - The location of the tile. Used to access the tile in map.
+    private final TileType type - The type of tile. Dictates if fighters can walk through it and
+        if projectiles can pass through it.
+
+    private boolean hasBeenVisited - Pathfinding var used by Map. Blocks pathfinding algorithm from checking
+        where it's already been.
+    private boolean isOccupied - Used to store if a fighter is standing on the tile or not. Used by checkPassability
+    private LinkedList<Tile> pathToTile - Used by Map to store a path for pathfinding.
+    private ArrayList<Tile> linked - Stores the tiles adjacent to this one. Used for movement.
  */
+
 public class Tile {
 
     private final Coord XY;
@@ -15,9 +25,7 @@ public class Tile {
     private LinkedList<Tile> pathToTile;
     private ArrayList<Tile> linked;
 
-    /*
-        Class initialisation
-     */
+
     public Tile(final int INIT_X, final int INIT_Y, final TileType INIT_TYPE){
         XY = new Coord(INIT_X, INIT_Y);
         type = INIT_TYPE;
@@ -57,7 +65,9 @@ public class Tile {
         pathToTile.clear();
     }
 
-    //This is called from the DESTINATION, not the source
+    /*
+        Given a tile, returns if that tile could move into this one.
+     */
     public boolean checkPassability(Tile source){
         boolean areTheyPassable;
         switch(type){
@@ -73,7 +83,10 @@ public class Tile {
         return (!hasBeenVisited && !isOccupied && isHeightPassable && areTheyPassable);
     }
 
-    public int heightDif(Tile compTile){ //gets how much higher one tile is compared to this one
+    /*
+        Gets the difference in height between two tiles
+     */
+    public int heightDif(Tile compTile){
         int ourHeight;
         int theirHeight;
         switch(type){
