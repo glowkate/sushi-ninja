@@ -54,30 +54,21 @@ public class Fighter implements Comparable<Fighter>{
         TYPE = INIT_TYPE;
         state = FighterState.ALIVE;
         switch(TYPE) {
-            case FOODGHOSTA:
-            case FOODGHOSTB:
-                NAME = "A Ghost";
+            case FLAME:
+                NAME = "Flamekin";
                 TEAM = FighterTeam.ENEMY;
-                MAX_HP = 2;
-                DEF = 2;
-                ATTK = 1;
+                MAX_HP = 4;
+                DEF = 0;
+                ATTK = 3;
                 MAX_MOVE = 2;
                 break;
-            case FORKGHOST:
-                NAME = "An Undead Fork";
+            case SPIRITFLAME:
+                NAME = "Spiritfuled Flamekin";
                 TEAM = FighterTeam.ENEMY;
                 MAX_HP = 3;
-                DEF = 1;
-                ATTK = 3;
-                MAX_MOVE = 1;
-                break;
-            case SPOONGHOST:
-                NAME = "An Undead Spoon";
-                TEAM = FighterTeam.ENEMY;
-                MAX_HP = 2;
                 DEF = 0;
-                ATTK = 2;
-                MAX_MOVE = 1;
+                ATTK = 4;
+                MAX_MOVE = 3;
                 break;
             case SOUL:
                 NAME = "Soul";
@@ -111,6 +102,23 @@ public class Fighter implements Comparable<Fighter>{
                 ATTK = 1;
                 MAX_MOVE = 2;
                 break;
+            case UNI:
+                NAME = "Uni";
+                TEAM = FighterTeam.ALLIED;
+                MAX_HP = 6;
+                DEF = 1;
+                ATTK = 4;
+                MAX_MOVE = 3;
+                break;
+            case DUA:
+                NAME = "Dua";
+                TEAM = FighterTeam.ALLIED;
+                MAX_HP = 5;
+                DEF = 0;
+                ATTK = 5;
+                MAX_MOVE = 4;
+                break;
+
             default:
                 NAME = "Enemy";
                 TEAM = FighterTeam.ENEMY;

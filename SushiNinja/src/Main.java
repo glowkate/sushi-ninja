@@ -27,33 +27,124 @@ public class Main {
             }
         }
 
+        if(userInput.equals("1")) {
+            String strIn =
+                    "          " +
+                            " XVX  XVX " +
+                            "V        V" +
+                            "  V    V  " +
+                            " X      X " +
+                            " XXXXXXXX " +
+                            "          ";
 
-        String strIn =
-                "          " +
-                " XVX  XVX " +
-                "V        V" +
-                "  V    V  " +
-                "          " +
-                " XXXXXXXX " +
-                "          ";
+            Map mapIn = new Map(strIn);
 
-        Map mapIn = new Map(strIn);
+            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
+            fighterIn1.placeOnMap(new Coord(5, 6), mapIn);
 
-        Fighter fighterIn1 = new Fighter(FighterType.SMALLTEST);
-        fighterIn1.placeOnMap(new Coord(6, 0), mapIn);
+            Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn2.placeOnMap(new Coord(0, 1), mapIn);
 
-        Fighter fighterIn2 = new Fighter(FighterType.FRIENDTEST);
-        fighterIn2.placeOnMap(new Coord(0, 0), mapIn);
+            Fighter fighterIn3 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn3.placeOnMap(new Coord(9, 1), mapIn);
 
-        Fighter fighterIn3 = new Fighter(FighterType.TALLTEST);
-        fighterIn3.placeOnMap(new Coord(7, 0), mapIn);
+            ArrayList<Fighter> listIn = new ArrayList<>();
+            listIn.add(fighterIn1);
+            listIn.add(fighterIn2);
+            listIn.add(fighterIn3);
 
-        ArrayList<Fighter> listIn = new ArrayList<>();
-        listIn.add(fighterIn1);
-        listIn.add(fighterIn2);
-        listIn.add(fighterIn3);
+            GameWorld gw = new GameWorld(mapIn, listIn);
+            gw.runGame();
+        }
+        else if (userInput.equals("2")){
+            String strIn =
+                            "  X       " +
+                            " VXXXX    " +
+                            " V        " +
+                            "   VVVV  X" +
+                            "X        X" +
+                            "XX      XX" +
+                            "XXXX  XXXX";
 
-        GameWorld gw = new GameWorld(mapIn, listIn);
-        gw.runGame();
+            Map mapIn = new Map(strIn);
+            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
+            fighterIn1.placeOnMap(new Coord(3, 0), mapIn);
+
+            Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn2.placeOnMap(new Coord(1, 0), mapIn);
+
+            Fighter fighterIn3 = new Fighter(FighterType.FLAME);
+            fighterIn3.placeOnMap(new Coord(2, 5), mapIn);
+
+            Fighter fighterIn4 = new Fighter(FighterType.FLAME);
+            fighterIn4.placeOnMap(new Coord(7, 5), mapIn);
+
+            Fighter fighterIn5 = new Fighter(FighterType.FLAME);
+            fighterIn5.placeOnMap(new Coord(0, 0), mapIn);
+
+            Fighter fighterIn6 = new Fighter(FighterType.UNI);
+            fighterIn6.placeOnMap(new Coord(4, 4), mapIn);
+
+            Fighter fighterIn7 = new Fighter(FighterType.DUA);
+            fighterIn7.placeOnMap(new Coord(5, 4), mapIn);
+
+            ArrayList<Fighter> listIn = new ArrayList<>();
+            listIn.add(fighterIn1);
+            listIn.add(fighterIn2);
+            listIn.add(fighterIn3);
+            listIn.add(fighterIn4);
+            listIn.add(fighterIn5);
+            listIn.add(fighterIn6);
+            listIn.add(fighterIn7);
+
+            GameWorld gw = new GameWorld(mapIn, listIn);
+            gw.runGame();
+
+        }
+        else if(userInput.equals("3")){
+            String strIn =
+                            "          " +
+                            " V      V " +
+                            " VX    XV " +
+                            "VVX    XVV" +
+                            " VX    XV " +
+                            " V      V " +
+                            "          ";
+
+            Map mapIn = new Map(strIn);
+
+            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
+            fighterIn1.placeOnMap(new Coord(3, 3), mapIn);
+
+            Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn2.placeOnMap(new Coord(0, 2), mapIn);
+
+            Fighter fighterIn3 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn3.placeOnMap(new Coord(9, 2), mapIn);
+
+            Fighter fighterIn4 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn4.placeOnMap(new Coord(0, 4), mapIn);
+
+            Fighter fighterIn5 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn5.placeOnMap(new Coord(9, 4), mapIn);
+
+            Fighter fighterIn6 = new Fighter(FighterType.UNI);
+            fighterIn6.placeOnMap(new Coord(6, 3), mapIn);
+
+            Fighter fighterIn7 = new Fighter(FighterType.DUA);
+            fighterIn7.placeOnMap(new Coord(4, 3), mapIn);
+
+            ArrayList<Fighter> listIn = new ArrayList<>();
+            listIn.add(fighterIn1);
+            listIn.add(fighterIn2);
+            listIn.add(fighterIn3);
+            listIn.add(fighterIn4);
+            listIn.add(fighterIn5);
+            listIn.add(fighterIn6);
+            listIn.add(fighterIn7);
+
+            GameWorld gw = new GameWorld(mapIn, listIn);
+            gw.runGame();
+        }
     }
 }

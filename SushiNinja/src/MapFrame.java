@@ -42,6 +42,12 @@ public class MapFrame extends JPanel {
     private BufferedImage smallFighterImage;
     private BufferedImage tallFighterImage;
     private BufferedImage friendFighterImage;
+    private BufferedImage soulFighterImage;
+    private BufferedImage uniFighterImage;
+    private BufferedImage duaFighterImage;
+    private BufferedImage flameFighterImage;
+    private BufferedImage spiritFlameFighterImage;
+
 
     public MapFrame(final Map INIT_MAP, final ArrayList<Fighter> INIT_FIGHTERS) {
         MAP = INIT_MAP;
@@ -61,14 +67,19 @@ public class MapFrame extends JPanel {
 
         try {
             //Tiles
-            wallImage = ImageIO.read(new File("data/placeholderWall.png"));
-            fieldImage = ImageIO.read(new File("data/placeholderField.png"));
-            cliffImage = ImageIO.read(new File("data/placeholderCliff.png"));
+            wallImage = ImageIO.read(new File("data/wallTileArt.png"));
+            fieldImage = ImageIO.read(new File("data/openspaceTileArt.png"));
+            cliffImage = ImageIO.read(new File("data/gapTileArt.png"));
 
             //Fighters
             smallFighterImage = ImageIO.read(new File("data/placeholderFighterSmall.png"));
             tallFighterImage = ImageIO.read(new File("data/placeholderFighterTall.png"));
             friendFighterImage = ImageIO.read(new File("data/placeholderFighterAlly.png"));
+            soulFighterImage = ImageIO.read(new File("data/soulFighterArt.png"));
+            uniFighterImage = ImageIO.read(new File("data/uniFighterArt.png"));
+            duaFighterImage = ImageIO.read(new File("data/duaFighterArt.png"));
+            spiritFlameFighterImage = ImageIO.read(new File("data/spiritFlameFighterArt.png"));
+            flameFighterImage = ImageIO.read(new File("data/flameFighterArt.png"));
         } catch (IOException e) {
             assert(false);
         }
@@ -112,6 +123,7 @@ public class MapFrame extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
+        g.setColor(new Color(255, 0, 0));
         //Drawing tiles
         super.paintComponent(g);
         for(int x = 0; x < 10; x++){
@@ -153,6 +165,26 @@ public class MapFrame extends JPanel {
                     case FRIENDTEST:
                         isTall = false;
                         crntImage = friendFighterImage;
+                        break;
+                    case SOUL:
+                        isTall = true;
+                        crntImage = soulFighterImage;
+                        break;
+                    case UNI:
+                        isTall = true;
+                        crntImage = uniFighterImage;
+                        break;
+                    case DUA:
+                        isTall = true;
+                        crntImage = duaFighterImage;
+                        break;
+                    case FLAME:
+                        isTall = false;
+                        crntImage = flameFighterImage;
+                        break;
+                    case SPIRITFLAME:
+                        isTall = false;
+                        crntImage = spiritFlameFighterImage;
                         break;
                     default:
                         isTall = false; //these are here as formality for java. A crash should occur here.

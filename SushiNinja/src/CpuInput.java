@@ -57,7 +57,8 @@ public class CpuInput{
 
                 //RANGED FIGHTER TYPES
                 case TALLTEST:
-                case SPOONGHOST:
+                case SPIRITFLAME:
+                case UNI:
                     while (FIGHTER.getCrntMove() > 0) {
 
                         //Gets the least hit target that the fighter can see.
@@ -85,10 +86,9 @@ public class CpuInput{
                     break; //if you run out of movement or you hit a target, stop.
 
                 //Melee types go here.
-                case FORKGHOST:
-                case FOODGHOSTA:
-                case FOODGHOSTB:
+                case FLAME:
                 case SOUL:
+                case DUA:
                 case FRIENDTEST:
                 case SMALLTEST:
 
@@ -96,11 +96,13 @@ public class CpuInput{
                     LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
 
                     Fighter bestTarget = null;
-                    //figure out what target we selected
-                    for (Fighter f : opponents) {
-                        if (MAP.getTile(f.getXY()) == bestPath.getLast()) {
-                            bestTarget = f;
-                            break;
+                    if(bestPath != null) {
+                        //figure out what target we selected
+                        for (Fighter f : opponents) {
+                            if (MAP.getTile(f.getXY()) == bestPath.getLast()) {
+                                bestTarget = f;
+                                break;
+                            }
                         }
                     }
 
