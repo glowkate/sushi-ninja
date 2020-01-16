@@ -44,42 +44,42 @@ import java.util.LinkedList;
  */
 
 public class CpuInput{
-    public static void doTurn(final Fighter FIGHTER, final Map MAP, final ArrayList<Fighter> ACTIVE_FIGHTERS, final MapFrame GAME_FRAME){
-        if (FIGHTER.getState() == FighterState.ALIVE){
+    public static void doTurn(final Fighter fighter, final Map map, final ArrayList<Fighter> activeFighters, final MapFrame gameFrame){
+        if (fighter.getState() == FighterState.ALIVE){
 
             //Gets the fighter's opponents out of the ACTIVE FIGHTERS.
             //Active fighters is no longer used.
-            ArrayList<Fighter> opponents = getOpponents(ACTIVE_FIGHTERS, FIGHTER);
+            ArrayList<Fighter> opponents = getOpponents(activeFighters, fighter);
 
             //Preforms Melee or Ranged AI based on the fighter's type.
-            final FighterType F_TYPE = FIGHTER.getType();
+            final FighterType F_TYPE = fighter.getType();
             switch (F_TYPE) {
 
                 //RANGED FIGHTER TYPES
                 case TALLTEST:
                 case SPIRITFLAME:
                 case UNI:
-                    while (FIGHTER.getCrntMove() > 0) {
+                    while (fighter.getCrntMove() > 0) {
 
                         //Gets the least hit target that the fighter can see.
-                        Fighter bestTarget = getClosestLOS(FIGHTER, opponents, MAP);
+                        Fighter bestTarget = getClosestLOS(fighter, opponents, map);
 
                         if (bestTarget == null) { //It there's no viable targets...
-                            LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
+                            LinkedList<Tile> bestPath = getClosestPath(fighter, opponents, map);
 
                             if (bestPath != null && bestPath.size() != 0) {
                                 //move 1 step towards it.
                                 LinkedList<Tile> ultPath = new LinkedList<>();
                                 ultPath.offer(bestPath.get(0));
                                 ultPath.offer(bestPath.get(1));
-                                FIGHTER.moveFighter(ultPath, MAP, GAME_FRAME);
+                                fighter.moveFighter(ultPath, map, gameFrame);
                             } else {
                                 break; //if you can't reach the target, break
                             }
                         } else { //if a target was found, attack it.
-                            int fighterAttc = FIGHTER.calcDamage(RangeType.RANGED);
+                            int fighterAttc = fighter.calcDamage(RangeType.RANGED);
                             int targetDef = bestTarget.calcDefence();
-                            FIGHTER.attackFighter(fighterAttc, targetDef, bestTarget, MAP, GAME_FRAME);
+                            fighter.attackFighter(fighterAttc, targetDef, bestTarget, map, gameFrame);
                             break;
                         }
                     }
@@ -93,13 +93,13 @@ public class CpuInput{
                 case SMALLTEST:
 
                     //figure out the closest path to a target. In case of a tie, attack the one that's been attacked less
-                    LinkedList<Tile> bestPath = getClosestPath(FIGHTER, opponents, MAP);
+                    LinkedList<Tile> bestPath = getClosestPath(fighter, opponents, map);
 
                     Fighter bestTarget = null;
                     if(bestPath != null) {
                         //figure out what target we selected
                         for (Fighter f : opponents) {
-                            if (MAP.getTile(f.getXY()) == bestPath.getLast()) {
+                            if (map.getTile(f.getXY()) == bestPath.getLast()) {
                                 bestTarget = f;
                                 break;
                             }
@@ -108,17 +108,17 @@ public class CpuInput{
 
                     //move the dude.
                     if (bestPath != null && bestPath.size() != 0) {
-                        FIGHTER.moveFighter(bestPath, MAP, GAME_FRAME);
+                        fighter.moveFighter(bestPath, map, gameFrame);
                     }
 
                     if (bestTarget != null) {
                         //if next to best target after move, attack it
-                        Tile fighterTile = MAP.getTile(FIGHTER.getXY());
-                        Tile targetTile = MAP.getTile(bestTarget.getXY());
+                        Tile fighterTile = map.getTile(fighter.getXY());
+                        Tile targetTile = map.getTile(bestTarget.getXY());
                         if (fighterTile.getLinked().contains(targetTile)) {
-                            int fighterDamage = FIGHTER.calcDamage(RangeType.MELEE);
+                            int fighterDamage = fighter.calcDamage(RangeType.MELEE);
                             int targetDef = bestTarget.calcDefence();
-                            FIGHTER.attackFighter(fighterDamage, targetDef, bestTarget, MAP, GAME_FRAME);
+                            fighter.attackFighter(fighterDamage, targetDef, bestTarget, map, gameFrame);
                         }
                     }
                     break;
@@ -126,7 +126,7 @@ public class CpuInput{
                 default:
                     break;
             }
-            FIGHTER.resetMove();
+            fighter.resetMove();
         }
     }
 
@@ -139,12 +139,12 @@ public class CpuInput{
         final Fighter FIGHTER - The fighter who the program is getting the
      */
 
-    public static ArrayList<Fighter> getOpponents(final ArrayList<Fighter> ACTIVE_FIGHTERS, final Fighter FIGHTER){
+    public static ArrayList<Fighter> getOpponents(final ArrayList<Fighter> activeFighters, final Fighter fighter){
         ArrayList<Fighter> opponents = new ArrayList<>();
-        final FighterTeam AI_TEAM = FIGHTER.getTeam();
+        final FighterTeam AI_TEAM = fighter.getTeam();
         FighterTeam crntFighterTeam;
         //This loops figures out what Fighters are the AI's opponents.
-        for(Fighter f : ACTIVE_FIGHTERS){
+        for(Fighter f : activeFighters){
             if (f.getState() == FighterState.ALIVE) {
                 crntFighterTeam = f.getTeam();
                 if (AI_TEAM == FighterTeam.ENEMY) {
@@ -173,10 +173,10 @@ public class CpuInput{
             co-ordinates have line of sigh on each other.
      */
 
-    public static Fighter getClosestLOS(final Fighter FIGHTER, final ArrayList<Fighter> OPPONENTS, final Map MAP){
+    public static Fighter getClosestLOS(final Fighter fighter, final ArrayList<Fighter> opponents, final Map map){
         Fighter bestTarget = null;
-        for(Fighter f : OPPONENTS) {
-            if (MAP.checkLineOfSight(FIGHTER.getXY(), f.getXY())) {
+        for(Fighter f : opponents) {
+            if (map.checkLineOfSight(fighter.getXY(), f.getXY())) {
                 if(bestTarget == null) {
                     bestTarget = f;
                 }
@@ -202,8 +202,8 @@ public class CpuInput{
             path between two co-ordinates.
      */
 
-    public static LinkedList<Tile> getClosestPath(final Fighter FIGHTER, final ArrayList<Fighter> OPPONENTS, final Map MAP){
-        Coord ourCoord = FIGHTER.getXY();
+    public static LinkedList<Tile> getClosestPath(final Fighter fighter, final ArrayList<Fighter> opponents, final Map map){
+        Coord ourCoord = fighter.getXY();
         LinkedList<Tile> crntPath;
         LinkedList<Tile> bestPath = null;
         Coord crntCoord;
@@ -211,9 +211,9 @@ public class CpuInput{
         int bestPathLen = -1;
         Fighter bestTarget = null;
         //figure out the closest (best) target. In case of a tie, attack the one that's been attacked less
-        for(Fighter crntTarget : OPPONENTS){
+        for(Fighter crntTarget : opponents){
             crntCoord = crntTarget.getXY();
-            crntPath = MAP.getFighterPath(ourCoord, crntCoord);
+            crntPath = map.getFighterPath(ourCoord, crntCoord);
             crntPathLen = crntPath.size();
             if(crntPathLen != 0) {
                 if (bestPathLen == -1) {

@@ -24,11 +24,11 @@ public class GameWorld{
     ArrayList<Fighter> activeFighters;
     MapFrame frame;
 
-    public GameWorld(final Map MAP_INIT, final ArrayList<Fighter> FIGHTERS_INIT){
+    public GameWorld(final Map mapInit, final ArrayList<Fighter> fightersInit){
         gameFrame = new JFrame();
         state = GameState.PLAYERTURN;
-        MAP = MAP_INIT;
-        activeFighters = FIGHTERS_INIT;
+        MAP = mapInit;
+        activeFighters = fightersInit;
         frame = new MapFrame(MAP, activeFighters);
 
         gameFrame.setPreferredSize(new Dimension(960, 672));
@@ -102,37 +102,3 @@ public class GameWorld{
         }
     }
 }
-
-
-
-/*
-    public void drawStuff(){
-        String strIn = "XXXXXXXXXX" +
-                       "X        X" +
-                       "X   V    X" +
-                       "X   VV   X" +
-                       "X  VVV   X" +
-                       "X        X" +
-                       "XXXXXXXXXX";
-
-        Map mapIn = new Map(strIn);
-
-        Fighter fighterIn1 = new Fighter(FighterType.SMALLTEST);
-        fighterIn1.placeOnMap(new Coord(2, 2), mapIn);
-
-        Fighter fighterIn2 = new Fighter(FighterType.FRIENDTEST);
-        fighterIn2.placeOnMap(new Coord(2, 1), mapIn);
-
-        Fighter fighterIn3 = new Fighter(FighterType.TALLTEST);
-        fighterIn3.placeOnMap(new Coord(2, 3), mapIn);
-
-        ArrayList<Fighter> listIn = new ArrayList<>();
-        listIn.add(fighterIn1);
-        listIn.add(fighterIn2);
-        listIn.add(fighterIn3);
-
-        MapFrame frameIn = new MapFrame(mapIn, listIn);
-
-        frameIn.drawSelf();
-    }
-     */

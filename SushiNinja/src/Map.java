@@ -27,13 +27,6 @@ public class Map {
     }
 
     //For testing only
-    public Map(int x, int y) {
-        tiles = new Hashtable();
-        makeMap(x, y);
-        linkMap();
-    }
-
-    //For testing only
     public Map(){
         tiles = new Hashtable();
         makeMap(10, 8);

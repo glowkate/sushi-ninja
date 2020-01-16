@@ -168,18 +168,18 @@ public class Fighter implements Comparable<Fighter>{
         The MapFrame is used to draw the fighter on each step towards it's destination. This is done via updating the
         MapFrame.
      */
-    public void moveFighter(final LinkedList<Tile> PATH, final Map MAP, final MapFrame FRAME){
-        MAP.getTile(xy).setOccupied(false);
-        xy = PATH.get(0).getXY();
+    public void moveFighter(final LinkedList<Tile> path, final Map map, final MapFrame frame){
+        map.getTile(xy).setOccupied(false);
+        xy = path.get(0).getXY();
         Tile crntTile;
-        Tile lastTile = PATH.get(0);
+        Tile lastTile = path.get(0);
         boolean keepMoving = true;
-        for(int i = 1; i < PATH.size() && crntMove > 0 && keepMoving; i++){ //because getFighterPath includes the start tile, we start at the second tile when moving
-            crntTile = PATH.get(i);
+        for(int i = 1; i < path.size() && crntMove > 0 && keepMoving; i++){ //because getFighterPath includes the start tile, we start at the second tile when moving
+            crntTile = path.get(i);
             if (crntTile.checkPassability(lastTile)){
                 xy = crntTile.getXY();
                 crntMove -= 1;
-                FRAME.drawSelf();
+                frame.drawSelf();
                 try {
                     Thread.sleep(250);
                 }
@@ -190,18 +190,18 @@ public class Fighter implements Comparable<Fighter>{
                 keepMoving = false;
             }
         }
-        MAP.getTile(xy).setOccupied(true);
+        map.getTile(xy).setOccupied(true);
     }
 
     //FOR TESTING ONLY
-    public void moveFighter(final LinkedList<Tile> PATH, final Map MAP){
-        MAP.getTile(xy).setOccupied(false);
-        xy = PATH.get(0).getXY();
+    public void moveFighter(final LinkedList<Tile> path, final Map map){
+        map.getTile(xy).setOccupied(false);
+        xy = path.get(0).getXY();
         Tile crntTile;
-        Tile lastTile = PATH.get(0);
+        Tile lastTile = path.get(0);
         boolean keepMoving = true;
-        for(int i = 1; i < PATH.size() && crntMove > 0 && keepMoving; i++){ //because getFighterPath includes the start tile, we start at the second tile when moving
-            crntTile = PATH.get(i);
+        for(int i = 1; i < path.size() && crntMove > 0 && keepMoving; i++){ //because getFighterPath includes the start tile, we start at the second tile when moving
+            crntTile = path.get(i);
             if (crntTile.checkPassability(lastTile)){
                 xy = crntTile.getXY();
                 crntMove -= 1;
@@ -210,7 +210,7 @@ public class Fighter implements Comparable<Fighter>{
                 keepMoving = false;
             }
         }
-        MAP.getTile(xy).setOccupied(true);
+        map.getTile(xy).setOccupied(true);
     }
 
     /*
@@ -220,13 +220,13 @@ public class Fighter implements Comparable<Fighter>{
         this method calls RNG and calculates how many of the fighter's attacks hit. Melee attacks have
         a 1/2 chance at hitting and ranged attacks have a 1/3 chance of hitting.
      */
-    public int calcDamage(final RangeType MELEE_OR_RANGED){
+    public int calcDamage(final RangeType meleeOrRanged){
         final Random RNG = new Random();
         double attcRNG;
         int hitNum = 0;
         //Melee attacks have a 1/2 chance of hitting.
         //Ranged attacks have a 1/3 chance of hitting.
-        if (MELEE_OR_RANGED == RangeType.MELEE) {
+        if (meleeOrRanged == RangeType.MELEE) {
             for (int i = 0; i < ATTK; i++) {
                 attcRNG = RNG.nextDouble();
                 if(attcRNG <= 0.5){
@@ -234,7 +234,7 @@ public class Fighter implements Comparable<Fighter>{
                 }
             }
         }
-        else if (MELEE_OR_RANGED == RangeType.RANGED){
+        else if (meleeOrRanged == RangeType.RANGED){
             for (int i = 0; i < ATTK; i++) {
                 attcRNG = RNG.nextDouble();
                 if(attcRNG <= 0.333){
@@ -273,24 +273,24 @@ public class Fighter implements Comparable<Fighter>{
         A map and mapframe are provided to allow for drawing and for setting appropriate flags if the target
         dies.
      */
-    public void attackFighter(final int DAMAGE, final int DEFENCE, final Fighter TARGET, final Map MAP, final MapFrame GAME_FRAME){
-        int ULT_DAMAGE = DAMAGE - DEFENCE;
-        if(ULT_DAMAGE < 0){
-            ULT_DAMAGE = 0; //no negative damage on my watch
+    public void attackFighter(final int damage, final int defence, final Fighter target, final Map map, final MapFrame gameFrame){
+        int ultdamage = damage - defence;
+        if(ultdamage < 0){
+            ultdamage = 0; //no negative damage on my watch
         }
-        GAME_FRAME.hitFighter(TARGET.getXY(), xy);
-        GAME_FRAME.displayText(NAME + " hit " + TARGET.getName() + " " + ULT_DAMAGE + " times!");
-        TARGET.takeDamage(ULT_DAMAGE, MAP, GAME_FRAME);
+        gameFrame.hitFighter(target.getXY(), xy);
+        gameFrame.displayText(NAME + " hit " + target.getName() + " " + ultdamage + " times!");
+        target.takeDamage(ultdamage, map, gameFrame);
     }
 
     /*
         Given the amount of damage to be delt, it deals said amount of damage to self.
         Updates graphics if necessary and sets flags if the fighter dies.
      */
-    public void takeDamage(final int DAMAGE, final Map MAP , final MapFrame GAME_FRAME){
-        crntHp = crntHp - DAMAGE;
+    public void takeDamage(final int damage, final Map MAP , final MapFrame gameFrame){
+        crntHp = crntHp - damage;
         if(crntHp <= 0){
-            GAME_FRAME.displayText(NAME + " has fallen.");
+            gameFrame.displayText(NAME + " has fallen.");
             crntHp = 0;
             state = FighterState.DEAD;
             MAP.getTile(xy).setOccupied(false);
@@ -299,8 +299,8 @@ public class Fighter implements Comparable<Fighter>{
     }
 
     //FOR TESTING ONLY
-    public void takeDamage(final int DAMAGE){
-        crntHp =- DAMAGE;
+    public void takeDamage(final int damage){
+        crntHp =- damage;
         if(crntHp <= 0){
             crntHp = 0;
             state = FighterState.DEAD;
