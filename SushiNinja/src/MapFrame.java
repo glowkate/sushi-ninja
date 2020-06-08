@@ -64,6 +64,7 @@ public class MapFrame extends JPanel {
         FRAME.add(this);
         FRAME.pack();
         FRAME.setVisible(true);
+        FRAME.addMouseListener(new PlayerInput());
 
         try {
             //Tiles
@@ -155,6 +156,7 @@ public class MapFrame extends JPanel {
                 FighterType crntType = f.getType();
                 switch (crntType) {
                     case SMALLTEST:
+                    default:
                         isTall = false;
                         crntImage = smallFighterImage;
                         break;
@@ -185,11 +187,6 @@ public class MapFrame extends JPanel {
                     case SPIRITFLAME:
                         isTall = false;
                         crntImage = spiritFlameFighterImage;
-                        break;
-                    default:
-                        isTall = false; //these are here as formality for java. A crash should occur here.
-                        crntImage = smallFighterImage;
-                        assert (false);
                         break;
                 }
 

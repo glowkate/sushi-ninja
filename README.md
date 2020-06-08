@@ -1,4 +1,9 @@
 # sushi-ninja
+TO RUN:
+Go into the run directory and run main.
+
+_______________________________________________________________________________
+
 This is a turn based stratigy sim. There are 3 maps where two teams controlled
 by CPUs. Whatever team is left standing wins!
 

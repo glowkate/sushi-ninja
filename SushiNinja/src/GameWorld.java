@@ -26,6 +26,8 @@ public class GameWorld{
 
     public GameWorld(final Map mapInit, final ArrayList<Fighter> fightersInit){
         gameFrame = new JFrame();
+        PlayerInput pIn = new PlayerInput();
+        gameFrame.addMouseListener(pIn);
         state = GameState.PLAYERTURN;
         MAP = mapInit;
         activeFighters = fightersInit;

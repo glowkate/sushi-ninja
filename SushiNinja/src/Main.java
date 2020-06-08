@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -8,6 +9,17 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args){
+
+        //JFrame f = new JFrame("Mouse Test");
+
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        // Register the CallBack Interface class (below)
+        // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //f.addMouseListener(new PlayerInput() );
+
+        //f.setSize(300, 300);
+        //f.setVisible(true);
+
 
         Scanner s = new Scanner(System.in);
         String userInput = "";
