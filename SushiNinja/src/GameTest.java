@@ -339,11 +339,127 @@ public class GameTest {
         LinkedList<Tile> pathTest = mapTest.getFighterPath(coordIn1, coordIn2);
         LinkedList<Tile> pathGolden = new LinkedList<>();
         pathGolden.offer(mapTest.getTile(0,0));
-        pathGolden.offer(mapTest.getTile(1,0));
-        pathGolden.offer(mapTest.getTile(1,1));
+        pathGolden.offer(mapTest.getTile(0,1));
+        pathGolden.offer(mapTest.getTile(0,2));
         pathGolden.offer(mapTest.getTile(1,2));
         assertEquals(pathTest, pathGolden);
     }
+
+    /*
+        PlayerInput class tests
+     */
+
+    @Test
+    public void playerInputCheckRangedTargetsWorks(){
+        Map mapInput = new Map(
+                "          " +
+                        "          " +
+                        "          " +
+                        "XXXXXXXXXX" +
+                        "          " +
+                        "          " +
+                        "          ");
+        Fighter fighterInput1 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput2 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput3 = new Fighter(FighterType.TALLTEST);
+
+        fighterInput1.setXY(new Coord(1,1));
+        fighterInput2.setXY(new Coord(3, 2));
+        fighterInput3.setXY(new Coord(3,5));
+
+        ArrayList<Fighter> listInput = new ArrayList<>();
+        listInput.add(fighterInput1);
+        listInput.add(fighterInput2);
+        listInput.add(fighterInput3);
+
+        ArrayList<Fighter> targetsTest = PlayerInput.checkRangedTargets(mapInput, fighterInput1, listInput);
+        ArrayList<Fighter> targetsGolden = new ArrayList<>();
+
+        assertEquals(targetsTest, targetsGolden);
+    }
+
+    @Test
+    public void playerInputCheckMeleeTargetsWorks(){
+        Fighter fighterInput1 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput2 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput3 = new Fighter(FighterType.TALLTEST);
+        Fighter fighterInput4 = new Fighter(FighterType.TALLTEST);
+
+        fighterInput1.setXY(new Coord(2,2));
+        fighterInput2.setXY(new Coord(2, 3));
+        fighterInput3.setXY(new Coord(3,2));
+        fighterInput4.setXY(new Coord(3,3));
+
+        ArrayList<Fighter> listInput = new ArrayList<>();
+        listInput.add(fighterInput1);
+        listInput.add(fighterInput2);
+        listInput.add(fighterInput3);
+        listInput.add(fighterInput4);
+
+        ArrayList<Fighter> targetsTest = PlayerInput.checkMeleeTargets(fighterInput1, listInput);
+        ArrayList<Fighter> targetsGolden = new ArrayList<>();
+        targetsGolden.add(fighterInput3);
+
+        assertEquals(targetsTest, targetsGolden);
+    }
+
+    @Test
+    public void playerInputGetLOSfightersWorks(){
+        Map mapInput = new Map(
+                "          " +
+                        "          " +
+                        "          " +
+                        "XXXXXXXXXX" +
+                        "          " +
+                        "          " +
+                        "          ");
+        Fighter fighterInput1 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput2 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput3 = new Fighter(FighterType.TALLTEST);
+
+        fighterInput1.setXY(new Coord(1,1));
+        fighterInput2.setXY(new Coord(3, 2));
+        fighterInput3.setXY(new Coord(3,5));
+
+        ArrayList<Fighter> listInput = new ArrayList<>();
+        listInput.add(fighterInput1);
+        listInput.add(fighterInput2);
+        listInput.add(fighterInput3);
+
+        ArrayList<Fighter> targetsTest = PlayerInput.getLOSfighters(mapInput, fighterInput1, listInput);
+        ArrayList<Fighter> targetsGolden = new ArrayList<>();
+        targetsGolden.add(fighterInput2);
+
+        assertEquals(targetsTest, targetsGolden);
+    }
+
+    @Test
+    public void playerInputGetAdjacentFightersWorks(){
+        Fighter fighterInput1 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput2 = new Fighter(FighterType.FRIENDTEST);
+        Fighter fighterInput3 = new Fighter(FighterType.TALLTEST);
+        Fighter fighterInput4 = new Fighter(FighterType.TALLTEST);
+
+        fighterInput1.setXY(new Coord(2,2));
+        fighterInput2.setXY(new Coord(2, 3));
+        fighterInput3.setXY(new Coord(3,2));
+        fighterInput4.setXY(new Coord(3,3));
+
+        ArrayList<Fighter> listInput = new ArrayList<>();
+        listInput.add(fighterInput1);
+        listInput.add(fighterInput2);
+        listInput.add(fighterInput3);
+        listInput.add(fighterInput4);
+
+        ArrayList<Fighter> targetsTest = PlayerInput.getAdjacentFighters(fighterInput1, listInput);
+        ArrayList<Fighter> targetsGolden = new ArrayList<>();
+        targetsGolden.add(fighterInput2);
+        targetsGolden.add(fighterInput3);
+
+        assertEquals(targetsTest, targetsGolden);
+    }
+
+
 
     /*
         Tile class tests

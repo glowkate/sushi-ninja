@@ -54,23 +54,79 @@ public class PlayerInput implements MouseListener {
                 hasAction = true;
                 while (hasAction) {
                     //find what actions the fighter can take
-                    //ATTACK
 
+                    //ATTACK
                     switch(crrntFighter.getType()) {
                         //Melee
                         case SUSHI:
                         case EGG:
                         default:
-
+                            if (checkMeleeTargets(crrntFighter, activeFighters).size() != 0){
+                                canAttack = true;
+                            }
+                            else{
+                                canAttack = false;
+                            }
                             break;
-
                         //Ranged
                         case TEMPURA:
-
+                            if (checkRangedTargets(map, crrntFighter, activeFighters).size() != 0) {
+                                canAttack = true;
+                            }
+                            else{
+                                canAttack = false;
+                            }
                             break;
                     }
+
+                    //MOVE
                 }
             }
         }
+    }
+
+    public static ArrayList<Fighter> checkRangedTargets(Map map, Fighter crrntFighter, ArrayList<Fighter> activeFighters) {
+        ArrayList<Fighter> LOStargets = new ArrayList<>();
+        for(Fighter f : getLOSfighters(map, crrntFighter, activeFighters)){
+            if(f.getTeam() == FighterTeam.ENEMY){
+                LOStargets.add(f);
+            }
+        }
+        return (LOStargets);
+    }
+
+        public static ArrayList<Fighter> checkMeleeTargets(Fighter crrntFighter, ArrayList<Fighter> activeFighters){
+        ArrayList<Fighter> adjacentTargets = new ArrayList<>();
+        for (Fighter f : getAdjacentFighters(crrntFighter, activeFighters)){
+            if (f.getTeam() == FighterTeam.ENEMY){
+                adjacentTargets.add(f);
+            }
+        }
+        return (adjacentTargets);
+    }
+
+    public static ArrayList<Fighter> getLOSfighters(Map map, Fighter crrntFighter, ArrayList<Fighter> activeFighters){
+        ArrayList<Fighter> LOSfighters = new ArrayList<>();
+        for(Fighter f : activeFighters){
+            if(map.checkLineOfSight(f.getXY(), crrntFighter.getXY()) && f != crrntFighter){
+                LOSfighters.add(f);
+            }
+        }
+        return(LOSfighters);
+    }
+
+    public static ArrayList<Fighter> getAdjacentFighters (Fighter crrntFighter, ArrayList<Fighter> activeFighters){
+        ArrayList<Fighter> adjacentFighters = new ArrayList<>();
+        final Coord up = new Coord(crrntFighter.getXY().getX(), crrntFighter.getXY().getY() + 1);
+        final Coord down = new Coord(crrntFighter.getXY().getX(), crrntFighter.getXY().getY() - 1);
+        final Coord left = new Coord(crrntFighter.getXY().getX() - 1, crrntFighter.getXY().getY());
+        final Coord right = new Coord(crrntFighter.getXY().getX() + 1, crrntFighter.getXY().getY());
+
+        for (Fighter f : activeFighters){
+            if (f.getXY().equals(up) || f.getXY().equals(down) || f.getXY().equals(left) || f.getXY().equals(right) && f != crrntFighter){
+                adjacentFighters.add(f);
+            }
+        }
+        return (adjacentFighters);
     }
 }
