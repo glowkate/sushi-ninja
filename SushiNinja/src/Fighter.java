@@ -118,7 +118,30 @@ public class Fighter implements Comparable<Fighter>{
                 ATTK = 5;
                 MAX_MOVE = 4;
                 break;
-
+            case SUSHI:
+                NAME = "Sushi";
+                TEAM = FighterTeam.PLAYER;
+                MAX_HP = 4;
+                DEF = 1;
+                ATTK = 3;
+                MAX_MOVE = 5;
+                break;
+            case TEMPURA:
+                NAME = "Temmie";
+                TEAM = FighterTeam.PLAYER;
+                MAX_HP = 4;
+                DEF = 0;
+                ATTK = 5;
+                MAX_MOVE = 3;
+                break;
+            case EGG:
+                NAME = "Eggbert";
+                TEAM = FighterTeam.ALLIED;
+                MAX_HP = 6;
+                DEF = 2;
+                ATTK = 2;
+                MAX_MOVE = 3;
+                break;
             default:
                 NAME = "Enemy";
                 TEAM = FighterTeam.ENEMY;
@@ -269,7 +292,7 @@ public class Fighter implements Comparable<Fighter>{
     }
 
     /*
-        This function takes the damage, defence, and target. It orginises how much damage the target takes.
+        This function takes the damage, defence, and target. It organises how much damage the target takes.
         A map and mapframe are provided to allow for drawing and for setting appropriate flags if the target
         dies.
      */
@@ -378,6 +401,24 @@ public class Fighter implements Comparable<Fighter>{
                 break;
             case FRIENDTEST:
                 addString = "<FRIENDTEST>";
+                break;
+            case SOUL:
+                addString = "<SOUL>";
+                break;
+            case UNI:
+                addString = "<UNI>";
+                break;
+            case DUA:
+                addString = "<DUA>";
+                break;
+            case SUSHI:
+                addString = "<SUSHI>";
+                break;
+            case TEMPURA:
+                addString = "<TEMPURA>";
+                break;
+            case EGG:
+                addString = "<EGG>";
                 break;
             default:
                 addString = "<>";

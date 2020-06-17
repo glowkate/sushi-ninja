@@ -1,6 +1,7 @@
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class PlayerInput implements MouseListener {
     public void mouseClicked(MouseEvent event)
@@ -53,6 +54,44 @@ public class PlayerInput implements MouseListener {
                     //find what actions the fighter can take
 
                     actions = checkActions(map, crrntFighter, activeFighters, activeTeam);
+
+                    //If the fighter cannot move or attack, it automatically passes regardless if it can skip or not.
+                    if(!actions[0] && !actions[1]){
+                        hasAction = false;
+                    }
+                    else{
+                        Action playerChoice = Action.PASS;
+                        Fighter playerTarget = new Fighter();
+                        LinkedList<Tile> playerMove = new LinkedList<>();
+                        //stuff getting the player's input. NOT IMPLEMENTED YET!!!
+
+                        //Executing the actions
+                        switch (playerChoice){
+                            case ATTACK:
+                                int damage;
+                                switch (crrntFighter.getType()){
+                                    case SUSHI:
+                                    case EGG:
+                                    default:
+                                        damage = crrntFighter.calcDamage(RangeType.MELEE);
+                                        break;
+                                    case TEMPURA:
+                                        damage = crrntFighter.calcDamage(RangeType.RANGED);
+                                        break;
+                                }
+                                crrntFighter.attackFighter(damage, playerTarget.calcDefence(), playerTarget, map, gameFrame);
+                            case MOVE:
+                                crrntFighter.moveFighter(playerMove, map, gameFrame);
+                            case SKIP:
+                                nextActiveTeam.add(crrntFighter);
+                                hasAction = false;
+                                break;
+                            case PASS:
+                            default:
+                                hasAction = false;
+                                break;
+                        }
+                    }
                 }
             }
         }
