@@ -40,10 +40,7 @@ public class PlayerInput implements MouseListener {
         }
         boolean isTurn = true;
 
-        boolean canAttack;
-        boolean canMove;
-        boolean canSkip;
-        boolean canPass;
+        boolean[] actions;
 
         boolean hasAction = true;
 
@@ -55,34 +52,43 @@ public class PlayerInput implements MouseListener {
                 while (hasAction) {
                     //find what actions the fighter can take
 
-                    //ATTACK
-                    switch(crrntFighter.getType()) {
-                        //Melee
-                        case SUSHI:
-                        case EGG:
-                        default:
-                            if (checkMeleeTargets(crrntFighter, activeFighters).size() != 0){
-                                canAttack = true;
-                            }
-                            else{
-                                canAttack = false;
-                            }
-                            break;
-                        //Ranged
-                        case TEMPURA:
-                            if (checkRangedTargets(map, crrntFighter, activeFighters).size() != 0) {
-                                canAttack = true;
-                            }
-                            else{
-                                canAttack = false;
-                            }
-                            break;
-                    }
-
-                    //MOVE
+                    actions = checkActions(map, crrntFighter, activeFighters, activeTeam);
                 }
             }
         }
+    }
+
+    /*
+        Checks the possible actions that the current fighter could take
+        Can attack if there are any available targets
+        Can move if the fighter has movement remaining
+        Can skip if there are other fighters in the lineup
+        Can always pass
+     */
+    public static boolean[] checkActions(Map map, Fighter crrntFighter, ArrayList<Fighter> activeFighters, ArrayList<Fighter> activeTeam){
+        boolean canAttack, canMove, canSkip;
+
+        //ATTACK
+        switch(crrntFighter.getType()) {
+            //Melee
+            case SUSHI:
+            case EGG:
+            default:
+                canAttack = checkMeleeTargets(crrntFighter, activeFighters).size() != 0;
+                break;
+            //Ranged
+            case TEMPURA:
+                canAttack = checkRangedTargets(map, crrntFighter, activeFighters).size() != 0;
+                break;
+        }
+
+        //MOVE
+        canMove = crrntFighter.getCrntMove() > 0;
+
+        //SKIP
+        canSkip = activeTeam.size() > 1;
+
+        return (new boolean[]{canAttack, canMove, canSkip});
     }
 
     public static ArrayList<Fighter> checkRangedTargets(Map map, Fighter crrntFighter, ArrayList<Fighter> activeFighters) {

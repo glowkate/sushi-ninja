@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -348,6 +349,46 @@ public class GameTest {
     /*
         PlayerInput class tests
      */
+
+    @Test
+    public void playerInputCheckActionsWorks() {
+        Map mapInput = new Map();
+
+        Fighter fighterInput1 = new Fighter(FighterType.SUSHI);
+        Fighter fighterInput2 = new Fighter(FighterType.TEMPURA);
+        Fighter fighterInput3 = new Fighter(FighterType.SMALLTEST);
+
+        fighterInput1.setXY(new Coord(4,4));
+        fighterInput2.setXY(new Coord(4,6));
+        fighterInput3.setXY(new Coord(3,2));
+
+        ArrayList<Fighter> teamInput1 = new ArrayList<>();
+        ArrayList<Fighter> teamInput2 = new ArrayList<>();
+
+        teamInput1.add(fighterInput1);
+        teamInput1.add(fighterInput2);
+
+        teamInput2.add(fighterInput2);
+
+        ArrayList<Fighter> activeInput1 = new ArrayList<>();
+        ArrayList<Fighter> activeInput2 = new ArrayList<>();
+
+        activeInput1.add(fighterInput1);
+        activeInput1.add(fighterInput2);
+        activeInput1.add(fighterInput3);
+
+        activeInput2.add(fighterInput2);
+        activeInput2.add(fighterInput3);
+
+        boolean[] actionsTest1 = PlayerInput.checkActions(mapInput, fighterInput1, activeInput1, teamInput1);
+        boolean[] actionsTest2 = PlayerInput.checkActions(mapInput, fighterInput2, activeInput2, teamInput2);
+
+        boolean[] actionsGolden1 = {false, true, true};
+        boolean[] actionsGolden2 = {true, true, false};
+
+        assertArrayEquals(actionsTest1, actionsGolden1);
+        assertArrayEquals(actionsTest2, actionsGolden2);
+    }
 
     @Test
     public void playerInputCheckRangedTargetsWorks(){

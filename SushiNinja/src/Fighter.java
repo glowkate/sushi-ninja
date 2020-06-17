@@ -181,7 +181,7 @@ public class Fighter implements Comparable<Fighter>{
                 crntMove -= 1;
                 frame.drawSelf();
                 try {
-                    Thread.sleep(250);
+                    Thread.sleep(200);
                 }
                 catch (Exception e){
                 }
