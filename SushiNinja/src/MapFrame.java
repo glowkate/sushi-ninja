@@ -30,8 +30,31 @@ public class MapFrame extends JPanel {
     private String displayText;
     final JFrame FRAME;
 
+    private ButtonState attackButtonState;
+    private ButtonState moveButtonState;
+    private ButtonState skipButtonState;
+    private ButtonState passButtonState;
+    private ButtonState backButtonState;
+
     private Coord targetCoords;
     private Coord ogCoords;
+
+    //Buttons
+    private BufferedImage attackButtonActive;
+    private BufferedImage moveButtonActive;
+    private BufferedImage skipButtonActive;
+    private BufferedImage passButtonActive;
+    private BufferedImage backButtonActive;
+
+    private BufferedImage attackButtonPushed;
+    private BufferedImage moveButtonPushed;
+    private BufferedImage skipButtonPushed;
+    private BufferedImage passButtonPushed;
+    private BufferedImage backButtonPushed;
+
+    private BufferedImage attackButtonInactive;
+    private BufferedImage moveButtonInactive;
+    private BufferedImage passButtonInactive;
 
     //Tiles
     private BufferedImage wallImage;
@@ -54,6 +77,12 @@ public class MapFrame extends JPanel {
         active = INIT_FIGHTERS;
 
         displayText = "";
+
+        attackButtonState = ButtonState.HIDDEN;
+        moveButtonState = ButtonState.HIDDEN;
+        skipButtonState = ButtonState.HIDDEN;
+        passButtonState = ButtonState.HIDDEN;
+        backButtonState = ButtonState.HIDDEN;
 
         targetCoords = null;
         ogCoords = null;
@@ -148,7 +177,7 @@ public class MapFrame extends JPanel {
         BufferedImage crntImage;
         Coord crntCoord;
         boolean isTall;
-        ArrayList<Fighter> drawOrder = new ArrayList<>();
+        ArrayList<Fighter> drawOrder;
         drawOrder = (ArrayList<Fighter>) active.clone();
         Collections.sort(drawOrder);
         for(Fighter f : drawOrder){
