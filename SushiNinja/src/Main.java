@@ -51,7 +51,7 @@ public class Main {
 
             Map mapIn = new Map(strIn);
 
-            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
+            Fighter fighterIn1 = new Fighter(FighterType.SUSHI);
             fighterIn1.placeOnMap(new Coord(5, 6), mapIn);
 
             Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);

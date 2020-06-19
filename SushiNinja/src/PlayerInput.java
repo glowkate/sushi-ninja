@@ -4,30 +4,60 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class PlayerInput implements MouseListener {
+    static private boolean newClick;
+    static private boolean isPressed;
+    static private boolean isReleased;
+    static private int mousePressX;
+    static private int mousePressY;
+    static private int mouseReleaseX;
+    static private int mouseReleaseY;
+    static private int mouseClickX;
+    static private int mouseClickY;
+
+    PlayerInput(){
+        newClick = false;
+        isPressed = false;
+        mouseClickX = 0;
+        mouseClickY = 0;
+        mousePressX = 0;
+        mousePressY = 0;
+        mouseReleaseX = 0;
+        mouseReleaseY = 0;
+    }
+
     public void mouseClicked(MouseEvent event)
     {
-        System.out.println("Mouse clicked @ position x = "
-                + event.getX() + " y = " + event.getY());
+        newClick = true;
+        mouseClickX = event.getX();
+        mouseClickY = event.getY();
+        //System.out.println("Mouse clicked @ position x = "
+        //        + event.getX() + " y = " + event.getY());
     }
 
     public void mouseEntered(MouseEvent event)
-    {  System.out.println("Mouse entered. x = "
-            + event.getX() + " y = " + event.getY());
+    {
+        newClick = false;
+        isPressed = false;
     }
 
     public void mouseExited(MouseEvent event)
-    {  System.out.println("Mouse exited. x = "
-            + event.getX() + " y = " + event.getY());
+    {
+        newClick = false;
+        isPressed = false;
     }
 
     public void mousePressed(MouseEvent event)
-    {  System.out.println("Mouse pressed. x = "
-            + event.getX() + " y = " + event.getY());
+    {
+        mousePressX = event.getX();
+        mousePressY = event.getY();
+        isPressed = true;
     }
 
     public void mouseReleased(MouseEvent event)
-    {  System.out.println("Mouse released. x = "
-            + event.getX() + " y = " + event.getY());
+    {
+        mouseReleaseX = event.getX();
+        mouseReleaseY = event.getY();
+        isReleased = true;
     }
 
     public void doTurn(final Map map, final ArrayList<Fighter> activeFighters, final MapFrame gameFrame)
@@ -63,9 +93,43 @@ public class PlayerInput implements MouseListener {
                         Action playerChoice = Action.PASS;
                         Fighter playerTarget = new Fighter();
                         LinkedList<Tile> playerMove = new LinkedList<>();
-                        //stuff getting the player's input. NOT IMPLEMENTED YET!!!
-
-
+                        boolean inMenus = true;
+                        //GETTING THE PLAYER'S INPUT VIA MENUS
+                        while (inMenus) {
+                            setButtons(actions, gameFrame);
+                            boolean validClick = false;
+                            Action chosenAction = Action.PASS;
+                            int counter = 0;
+                            while(!validClick) {
+                                System.out.print(""); //For some reason, we need this line of code
+                                if(isPressed && mousePressY > 96 * 6.5){
+                                    if (mousePressX < 96 && actions[0]) {
+                                        gameFrame.setAttackButton(ButtonState.PUSHED);
+                                        //System.out.println("Attack");
+                                        isPressed = false;
+                                    }
+                                    else if (mousePressX > 96 && mousePressX < 96*2 && actions[1]) {
+                                        gameFrame.setMoveButton(ButtonState.PUSHED);
+                                        //System.out.println("Move");
+                                        isPressed = false;
+                                    }
+                                    else if (mousePressX > 96*2 && mousePressX < 96*3 && actions[2]){
+                                        gameFrame.setSkipButton(ButtonState.PUSHED);
+                                        //System.out.println("Skip");
+                                        isPressed = false;
+                                    }
+                                    else if (mousePressX > 96*3 && mousePressX < 96*4){
+                                        gameFrame.setPassButton(ButtonState.PUSHED);
+                                        //System.out.println("Pass");
+                                        isPressed = false;
+                                    }
+                                }
+                                if(isReleased){
+                                    setButtons(actions, gameFrame);
+                                    isReleased = false;
+                                }
+                            }
+                        }
                         //Executing the actions
                         switch (playerChoice){
                             case ATTACK:
@@ -96,6 +160,30 @@ public class PlayerInput implements MouseListener {
                 }
             }
         }
+    }
+
+    public static void setButtons(boolean[] possibleActions, MapFrame gameFrame){
+        if(possibleActions[0]){
+            gameFrame.setAttackButton(ButtonState.ACTIVE);
+        }
+        else{
+            gameFrame.setAttackButton(ButtonState.INACTIVE);
+        }
+
+        if(possibleActions[1]){
+            gameFrame.setMoveButton(ButtonState.ACTIVE);
+        }
+        else{
+            gameFrame.setMoveButton(ButtonState.INACTIVE);
+        }
+
+        if(possibleActions[2]){
+            gameFrame.setSkipButton(ButtonState.ACTIVE);
+        }
+        else{
+            gameFrame.setSkipButton(ButtonState.INACTIVE);
+        }
+        gameFrame.setPassButton(ButtonState.ACTIVE);
     }
 
     /*

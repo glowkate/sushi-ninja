@@ -54,7 +54,7 @@ public class MapFrame extends JPanel {
 
     private BufferedImage attackButtonInactive;
     private BufferedImage moveButtonInactive;
-    private BufferedImage passButtonInactive;
+    private BufferedImage skipButtonInactive;
 
     //Tiles
     private BufferedImage wallImage;
@@ -70,6 +70,9 @@ public class MapFrame extends JPanel {
     private BufferedImage duaFighterImage;
     private BufferedImage flameFighterImage;
     private BufferedImage spiritFlameFighterImage;
+    private BufferedImage sushiFighterImage;
+    private BufferedImage temmieFighterImage;
+    private BufferedImage greggFighterImage;
 
 
     public MapFrame(final Map INIT_MAP, final ArrayList<Fighter> INIT_FIGHTERS) {
@@ -96,6 +99,23 @@ public class MapFrame extends JPanel {
         FRAME.addMouseListener(new PlayerInput());
 
         try {
+            //Buttons
+            attackButtonActive = ImageIO.read(new File("data/attackButton.png"));
+            moveButtonActive = ImageIO.read(new File("data/moveButton.png"));
+            skipButtonActive = ImageIO.read(new File("data/skipButton.png"));
+            passButtonActive = ImageIO.read(new File("data/passButton.png"));
+            backButtonActive = ImageIO.read(new File("data/backButton.png"));
+
+            attackButtonPushed = ImageIO.read(new File("data/attackButtonPressed.png"));
+            moveButtonPushed = ImageIO.read(new File("data/moveButtonPressed.png"));
+            skipButtonPushed = ImageIO.read(new File("data/skipButtonPressed.png"));
+            passButtonPushed = ImageIO.read(new File("data/passButtonPressed.png"));
+            backButtonPushed = ImageIO.read(new File("data/backButtonPressed.png"));
+
+            attackButtonInactive = ImageIO.read(new File("data/attackButtonInactive.png"));
+            moveButtonInactive = ImageIO.read(new File("data/moveButtonInactive.png"));
+            skipButtonInactive = ImageIO.read(new File("data/skipButtonInactive.png"));
+
             //Tiles
             wallImage = ImageIO.read(new File("data/wallTileArt.png"));
             fieldImage = ImageIO.read(new File("data/openspaceTileArt.png"));
@@ -110,6 +130,10 @@ public class MapFrame extends JPanel {
             duaFighterImage = ImageIO.read(new File("data/duaFighterArt.png"));
             spiritFlameFighterImage = ImageIO.read(new File("data/spiritFlameFighterArt.png"));
             flameFighterImage = ImageIO.read(new File("data/flameFighterArt.png"));
+            sushiFighterImage = ImageIO.read(new File("data/sushiFighterArt.png"));
+            temmieFighterImage = ImageIO.read(new File("data/temmieFighterArt.png"));
+            greggFighterImage = ImageIO.read(new File("data/greggFighterArt.png"));
+
         } catch (IOException e) {
             assert(false);
         }
@@ -141,6 +165,31 @@ public class MapFrame extends JPanel {
         targetCoords = null;
     }
 
+    public void setAttackButton(ButtonState newAttack){
+        attackButtonState = newAttack;
+        drawSelf();
+    }
+
+    public void setMoveButton(ButtonState newMove){
+        moveButtonState = newMove;
+        drawSelf();
+    }
+
+    public void setSkipButton(ButtonState newSkip){
+        skipButtonState = newSkip;
+        drawSelf();
+    }
+
+    public void setPassButton(ButtonState newPass){
+        passButtonState = newPass;
+        drawSelf();
+    }
+
+    public void setBackButton(ButtonState newBack){
+        backButtonState = newBack;
+        drawSelf();
+    }
+
     /*
         Used to update the image on screen.
      */
@@ -153,7 +202,7 @@ public class MapFrame extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(255, 0, 0));
+        g.setColor(new Color(66, 0, 0));
         //Drawing tiles
         super.paintComponent(g);
         for(int x = 0; x < 10; x++){
@@ -173,6 +222,79 @@ public class MapFrame extends JPanel {
                 }
             }
         }
+
+        //Drawing buttons
+        switch (attackButtonState){
+            case ACTIVE:
+                g.drawImage(attackButtonActive, 0, (int) Math.round(96 * 6.5), null);
+                break;
+            case PUSHED:
+                g.drawImage(attackButtonPushed, 0, (int) Math.round(96 * 6.5), null);
+                break;
+            case INACTIVE:
+                g.drawImage(attackButtonInactive, 0, (int) Math.round(96 * 6.5), null);
+                break;
+            case HIDDEN:
+            default:
+                break;
+        }
+
+        switch (moveButtonState){
+            case ACTIVE:
+                g.drawImage(moveButtonActive, 96, (int) Math.round(96 * 6.5), null);
+                break;
+            case PUSHED:
+                g.drawImage(moveButtonPushed, 96, (int) Math.round(96 * 6.5), null);
+                break;
+            case INACTIVE:
+                g.drawImage(moveButtonInactive, 96, (int) Math.round(96 * 6.5), null);
+                break;
+            case HIDDEN:
+            default:
+                break;
+        }
+
+        switch (skipButtonState){
+            case ACTIVE:
+                g.drawImage(skipButtonActive, 2*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case PUSHED:
+                g.drawImage(skipButtonPushed, 2*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case INACTIVE:
+                g.drawImage(skipButtonInactive, 2*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case HIDDEN:
+            default:
+                break;
+        }
+
+        switch (passButtonState){
+            case ACTIVE:
+                g.drawImage(passButtonActive, 3*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case PUSHED:
+                g.drawImage(passButtonPushed, 3*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case INACTIVE:
+            case HIDDEN:
+            default:
+                break;
+        }
+
+        switch (backButtonState){
+            case ACTIVE:
+                g.drawImage(backButtonActive, 4*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case PUSHED:
+                g.drawImage(backButtonPushed, 4*96, (int) Math.round(96 * 6.5), null);
+                break;
+            case INACTIVE:
+            case HIDDEN:
+            default:
+                break;
+        }
+
         //Drawing fighters
         BufferedImage crntImage;
         Coord crntCoord;
@@ -216,6 +338,18 @@ public class MapFrame extends JPanel {
                     case SPIRITFLAME:
                         isTall = false;
                         crntImage = spiritFlameFighterImage;
+                        break;
+                    case SUSHI:
+                        isTall = false;
+                        crntImage = sushiFighterImage;
+                        break;
+                    case TEMPURA:
+                        isTall = true;
+                        crntImage = temmieFighterImage;
+                        break;
+                    case EGG:
+                        isTall = false;
+                        crntImage = greggFighterImage;
                         break;
                 }
 

@@ -56,6 +56,7 @@ public class GameWorld{
      */
     public void runGame(){
         boolean runGame = true;
+        PlayerInput input = new PlayerInput();
         while(runGame){
             try {
                 Thread.sleep(1000);
@@ -64,6 +65,7 @@ public class GameWorld{
             }
             switch (state){
                 case PLAYERTURN:
+                    input.doTurn(MAP, activeFighters, frame);
                     state = GameState.ALLYTURN;
                     break;
                 case ALLYTURN:
