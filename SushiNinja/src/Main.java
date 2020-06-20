@@ -79,7 +79,7 @@ public class Main {
                             "XXXX  XXXX";
 
             Map mapIn = new Map(strIn);
-            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
+            Fighter fighterIn1 = new Fighter(FighterType.SUSHI);
             fighterIn1.placeOnMap(new Coord(3, 0), mapIn);
 
             Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
@@ -91,13 +91,13 @@ public class Main {
             Fighter fighterIn4 = new Fighter(FighterType.FLAME);
             fighterIn4.placeOnMap(new Coord(7, 5), mapIn);
 
-            Fighter fighterIn5 = new Fighter(FighterType.FLAME);
+            Fighter fighterIn5 = new Fighter(FighterType.SOUL);
             fighterIn5.placeOnMap(new Coord(0, 0), mapIn);
 
-            Fighter fighterIn6 = new Fighter(FighterType.UNI);
+            Fighter fighterIn6 = new Fighter(FighterType.EGG);
             fighterIn6.placeOnMap(new Coord(4, 4), mapIn);
 
-            Fighter fighterIn7 = new Fighter(FighterType.DUA);
+            Fighter fighterIn7 = new Fighter(FighterType.TEMPURA);
             fighterIn7.placeOnMap(new Coord(5, 4), mapIn);
 
             ArrayList<Fighter> listIn = new ArrayList<>();

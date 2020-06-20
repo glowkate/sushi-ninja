@@ -136,7 +136,7 @@ public class Fighter implements Comparable<Fighter>{
                 break;
             case EGG:
                 NAME = "Gregg";
-                TEAM = FighterTeam.ALLIED;
+                TEAM = FighterTeam.PLAYER;
                 MAX_HP = 6;
                 DEF = 2;
                 ATTK = 2;

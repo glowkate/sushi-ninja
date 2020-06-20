@@ -155,7 +155,7 @@ public class MapFrame extends JPanel {
         displayText = newDisplayText;
         drawSelf();
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         }
         catch (Exception e){
         }
@@ -223,78 +223,6 @@ public class MapFrame extends JPanel {
             }
         }
 
-        //Drawing buttons
-        switch (attackButtonState){
-            case ACTIVE:
-                g.drawImage(attackButtonActive, 0, (int) Math.round(96 * 6.5), null);
-                break;
-            case PUSHED:
-                g.drawImage(attackButtonPushed, 0, (int) Math.round(96 * 6.5), null);
-                break;
-            case INACTIVE:
-                g.drawImage(attackButtonInactive, 0, (int) Math.round(96 * 6.5), null);
-                break;
-            case HIDDEN:
-            default:
-                break;
-        }
-
-        switch (moveButtonState){
-            case ACTIVE:
-                g.drawImage(moveButtonActive, 96, (int) Math.round(96 * 6.5), null);
-                break;
-            case PUSHED:
-                g.drawImage(moveButtonPushed, 96, (int) Math.round(96 * 6.5), null);
-                break;
-            case INACTIVE:
-                g.drawImage(moveButtonInactive, 96, (int) Math.round(96 * 6.5), null);
-                break;
-            case HIDDEN:
-            default:
-                break;
-        }
-
-        switch (skipButtonState){
-            case ACTIVE:
-                g.drawImage(skipButtonActive, 2*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case PUSHED:
-                g.drawImage(skipButtonPushed, 2*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case INACTIVE:
-                g.drawImage(skipButtonInactive, 2*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case HIDDEN:
-            default:
-                break;
-        }
-
-        switch (passButtonState){
-            case ACTIVE:
-                g.drawImage(passButtonActive, 3*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case PUSHED:
-                g.drawImage(passButtonPushed, 3*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case INACTIVE:
-            case HIDDEN:
-            default:
-                break;
-        }
-
-        switch (backButtonState){
-            case ACTIVE:
-                g.drawImage(backButtonActive, 4*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case PUSHED:
-                g.drawImage(backButtonPushed, 4*96, (int) Math.round(96 * 6.5), null);
-                break;
-            case INACTIVE:
-            case HIDDEN:
-            default:
-                break;
-        }
-
         //Drawing fighters
         BufferedImage crntImage;
         Coord crntCoord;
@@ -360,6 +288,79 @@ public class MapFrame extends JPanel {
                     g.drawImage(crntImage, crntCoord.getX() * 96, crntCoord.getY() * 96, null);
                 }
             }
+
+            //Drawing buttons
+            switch (attackButtonState){
+                case ACTIVE:
+                    g.drawImage(attackButtonActive, 0, (int) Math.round(96 * 6.5), null);
+                    break;
+                case PUSHED:
+                    g.drawImage(attackButtonPushed, 0, (int) Math.round(96 * 6.5), null);
+                    break;
+                case INACTIVE:
+                    g.drawImage(attackButtonInactive, 0, (int) Math.round(96 * 6.5), null);
+                    break;
+                case HIDDEN:
+                default:
+                    break;
+            }
+
+            switch (moveButtonState){
+                case ACTIVE:
+                    g.drawImage(moveButtonActive, 96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case PUSHED:
+                    g.drawImage(moveButtonPushed, 96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case INACTIVE:
+                    g.drawImage(moveButtonInactive, 96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case HIDDEN:
+                default:
+                    break;
+            }
+
+            switch (skipButtonState){
+                case ACTIVE:
+                    g.drawImage(skipButtonActive, 2*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case PUSHED:
+                    g.drawImage(skipButtonPushed, 2*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case INACTIVE:
+                    g.drawImage(skipButtonInactive, 2*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case HIDDEN:
+                default:
+                    break;
+            }
+
+            switch (passButtonState){
+                case ACTIVE:
+                    g.drawImage(passButtonActive, 3*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case PUSHED:
+                    g.drawImage(passButtonPushed, 3*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case INACTIVE:
+                case HIDDEN:
+                default:
+                    break;
+            }
+
+            switch (backButtonState){
+                case ACTIVE:
+                    g.drawImage(backButtonActive, 4*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case PUSHED:
+                    g.drawImage(backButtonPushed, 4*96, (int) Math.round(96 * 6.5), null);
+                    break;
+                case INACTIVE:
+                case HIDDEN:
+                default:
+                    break;
+            }
+
             g.drawString(displayText, (int)(4.5 * 96.0), (int)(7.25 * 96));
 
             if(ogCoords != null && targetCoords != null){
