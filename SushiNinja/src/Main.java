@@ -70,35 +70,35 @@ public class Main {
         }
         else if (userInput.equals("2")){
             String strIn =
-                            "  X       " +
-                            " VXXXX    " +
-                            " V        " +
-                            "   VVVV  X" +
-                            "X        X" +
-                            "XX      XX" +
-                            "XXXX  XXXX";
+                            "          " +
+                            "XXX    XXX" +
+                            "          " +
+                            "   XXXX   " +
+                            "          " +
+                            "VV  VV  VV" +
+                            "          ";
 
             Map mapIn = new Map(strIn);
-            Fighter fighterIn1 = new Fighter(FighterType.SUSHI);
-            fighterIn1.placeOnMap(new Coord(3, 0), mapIn);
+            Fighter fighterIn1 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn1.placeOnMap(new Coord(0, 6), mapIn);
 
             Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
-            fighterIn2.placeOnMap(new Coord(1, 0), mapIn);
+            fighterIn2.placeOnMap(new Coord(9, 6), mapIn);
 
             Fighter fighterIn3 = new Fighter(FighterType.FLAME);
-            fighterIn3.placeOnMap(new Coord(2, 5), mapIn);
+            fighterIn3.placeOnMap(new Coord(2, 2), mapIn);
 
             Fighter fighterIn4 = new Fighter(FighterType.FLAME);
-            fighterIn4.placeOnMap(new Coord(7, 5), mapIn);
+            fighterIn4.placeOnMap(new Coord(7, 2), mapIn);
 
-            Fighter fighterIn5 = new Fighter(FighterType.SOUL);
-            fighterIn5.placeOnMap(new Coord(0, 0), mapIn);
+            Fighter fighterIn5 = new Fighter(FighterType.SUSHI);
+            fighterIn5.placeOnMap(new Coord(2, 0), mapIn);
 
             Fighter fighterIn6 = new Fighter(FighterType.EGG);
-            fighterIn6.placeOnMap(new Coord(4, 4), mapIn);
+            fighterIn6.placeOnMap(new Coord(9, 0), mapIn);
 
             Fighter fighterIn7 = new Fighter(FighterType.TEMPURA);
-            fighterIn7.placeOnMap(new Coord(5, 4), mapIn);
+            fighterIn7.placeOnMap(new Coord(0, 0), mapIn);
 
             ArrayList<Fighter> listIn = new ArrayList<>();
             listIn.add(fighterIn1);
@@ -115,36 +115,51 @@ public class Main {
         }
         else if(userInput.equals("3")){
             String strIn =
-                            "          " +
-                            " V      V " +
-                            " VX    XV " +
-                            "VVX    XVV" +
-                            " VX    XV " +
-                            " V      V " +
-                            "          ";
+                            "V       VV" +
+                            "  VVVV   V" +
+                            "  XXXXXX  " +
+                            "    VV    " +
+                            "V  XXXX  V" +
+                            "X XXXXXX X" +
+                            "X   VV   X";
 
             Map mapIn = new Map(strIn);
 
-            Fighter fighterIn1 = new Fighter(FighterType.SOUL);
-            fighterIn1.placeOnMap(new Coord(3, 3), mapIn);
+            Fighter fighterIn1 = new Fighter(FighterType.UNI);
+            fighterIn1.placeOnMap(new Coord(3, 6), mapIn);
 
-            Fighter fighterIn2 = new Fighter(FighterType.SPIRITFLAME);
-            fighterIn2.placeOnMap(new Coord(0, 2), mapIn);
+            Fighter fighterIn2 = new Fighter(FighterType.DUA);
+            fighterIn2.placeOnMap(new Coord(6, 6), mapIn);
 
             Fighter fighterIn3 = new Fighter(FighterType.SPIRITFLAME);
-            fighterIn3.placeOnMap(new Coord(9, 2), mapIn);
+            fighterIn3.placeOnMap(new Coord(6, 3), mapIn);
 
             Fighter fighterIn4 = new Fighter(FighterType.SPIRITFLAME);
-            fighterIn4.placeOnMap(new Coord(0, 4), mapIn);
+            fighterIn4.placeOnMap(new Coord(3, 3), mapIn);
 
             Fighter fighterIn5 = new Fighter(FighterType.SPIRITFLAME);
-            fighterIn5.placeOnMap(new Coord(9, 4), mapIn);
+            fighterIn5.placeOnMap(new Coord(7, 4), mapIn);
 
-            Fighter fighterIn6 = new Fighter(FighterType.UNI);
-            fighterIn6.placeOnMap(new Coord(6, 3), mapIn);
+            Fighter fighterIn6 = new Fighter(FighterType.SPIRITFLAME);
+            fighterIn6.placeOnMap(new Coord(2, 4), mapIn);
 
-            Fighter fighterIn7 = new Fighter(FighterType.DUA);
-            fighterIn7.placeOnMap(new Coord(4, 3), mapIn);
+            Fighter fighterIn7 = new Fighter(FighterType.EGG);
+            fighterIn7.placeOnMap(new Coord(4, 0), mapIn);
+
+            Fighter fighterIn8 = new Fighter(FighterType.TEMPURA);
+            fighterIn8.placeOnMap(new Coord(5, 0), mapIn);
+
+            Fighter fighterIn9 = new Fighter(FighterType.FLAME);
+            fighterIn9.placeOnMap(new Coord(0, 2), mapIn);
+
+            Fighter fighterIn10 = new Fighter(FighterType.FLAME);
+            fighterIn10.placeOnMap(new Coord(9, 2), mapIn);
+
+            Fighter fighterIn11 = new Fighter(FighterType.FLAME);
+            fighterIn11.placeOnMap(new Coord(2, 6), mapIn);
+
+            Fighter fighterIn12 = new Fighter(FighterType.FLAME);
+            fighterIn12.placeOnMap(new Coord(7, 6), mapIn);
 
             ArrayList<Fighter> listIn = new ArrayList<>();
             listIn.add(fighterIn1);
@@ -154,6 +169,11 @@ public class Main {
             listIn.add(fighterIn5);
             listIn.add(fighterIn6);
             listIn.add(fighterIn7);
+            listIn.add(fighterIn8);
+            listIn.add(fighterIn9);
+            listIn.add(fighterIn10);
+            listIn.add(fighterIn11);
+            listIn.add(fighterIn12);
 
             GameWorld gw = new GameWorld(mapIn, listIn);
             gw.runGame();

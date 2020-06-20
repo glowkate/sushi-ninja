@@ -202,7 +202,7 @@ public class MapFrame extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(66, 0, 0));
+        g.setColor(new Color(114, 0, 0));
         //Drawing tiles
         super.paintComponent(g);
         for(int x = 0; x < 10; x++){

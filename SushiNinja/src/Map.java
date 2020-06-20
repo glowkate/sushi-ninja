@@ -97,6 +97,12 @@ public class Map {
 
         boolean queFull = true;
 
+        switch(((Tile) tiles.get(endCoords)).getType()){ //If the end tile can't be stood on then eff it.
+            case WALL:
+            case GAP:
+                return (new LinkedList<>());
+        }
+
         while(crntTile != endTile && queFull){
             crntLinked = crntTile.getLinked();
             for(Tile t : crntLinked){
